@@ -1,0 +1,9 @@
+langgraph
+langchain
+langfuse
+langgraph-checkpoint-postgres
+fastapi
+uvicorn
+psycopg
+pydantic
+python-dotenv
