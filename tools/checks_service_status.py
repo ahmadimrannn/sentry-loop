@@ -1,6 +1,7 @@
 import requests
 from utils.time_it import time_it
 from api.event_logger import log_event
+from utils.resilience import with_resilience
 
 class ToolExecutionError(Exception):
     pass
@@ -10,6 +11,7 @@ SERVICES = {
   "cognilead": "https://cogni-lead.vercel.app/health"
 }
 
+@with_resilience()
 @time_it
 def checks_service_status(service: str):
   """Checks the health of the services."""

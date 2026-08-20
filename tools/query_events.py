@@ -1,6 +1,8 @@
 from datetime import datetime
 from tools.db import pool
+from utils.resilience import with_resilience
 
+@with_resilience()
 def query_events(service: str = None, event_type: str = None,
                   severity: str = None, thread_id: str = None,
                   since: datetime = None, limit: int = 50):
@@ -38,3 +40,8 @@ def query_events(service: str = None, event_type: str = None,
         with conn.cursor() as cur:
             cur.execute(query, params)
             return cur.fetchall()
+
+
+if __name__ == "__main__":
+    response = query_events(service="lumen", limit=5)
+    print(response)
