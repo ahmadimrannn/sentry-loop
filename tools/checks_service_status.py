@@ -13,7 +13,7 @@ SERVICES = {
 
 @with_resilience()
 @time_it
-def checks_service_status(service: str):
+def checks_service_health_status(service: str):
   """Checks the health of the services."""
 
   if service not in SERVICES:
@@ -42,5 +42,5 @@ def checks_service_status(service: str):
 
 
 if __name__ == "__main__":
-  health_status = checks_service_status("lumen")
+  health_status = checks_service_health_status("cognilead")
   print(health_status)
