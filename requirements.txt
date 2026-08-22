@@ -2,6 +2,7 @@ langgraph
 langchain
 langfuse
 langgraph-checkpoint-postgres
+langchain-google-genai
 fastapi
 uvicorn
 psycopg
