@@ -3,15 +3,17 @@ from tools.db import pool
 from utils.resilience import with_resilience
 
 @with_resilience()
-def query_events(service: str = None, event_type: str = None,
-                  severity: str = None, thread_id: str = None,
-                  since: datetime = None, limit: int = 50):
+def query_events(service: str = None, node_or_route: str = None, event_type: str= None, severity: str = None, thread_id: str = None,
+since: datetime = None, limit: int = 50):
     filters = []
     params = []
 
     if service:
         filters.append("service = %s")
         params.append(service)
+    if node_or_route:
+        filters.append("node_or_route = %s")
+        params.append(node_or_route)
     if event_type:
         filters.append("event_type = %s")
         params.append(event_type)
