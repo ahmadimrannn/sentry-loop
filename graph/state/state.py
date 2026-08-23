@@ -1,15 +1,25 @@
-from typing import Annotated, TypedDict
+from typing import TypedDict, Annotated
 import operator
 
 class InvestigationState(TypedDict):
+  step_count: int
+
   service: str
   incident: str
-  step_count: int
+  previous_hypothesis: str
   current_hypothesis: str 
+  pending_decision: dict
+  tool_result: str
   has_unexplored_lead: bool
-  severities_tried: list
-  routes_tried: list
-  known_routes: list
-  evidence_log: list
-  metrics_checked: bool
   service_status_checked: bool
+  metrics_checked: bool
+
+  investigation_summary: str
+
+  known_routes: list
+  severities_tried: Annotated[list, operator.add]
+  routes_tried: Annotated[list, operator.add]
+  evidence_log: Annotated[list, operator.add]
+  checked_this_step: str
+
+  route: str
