@@ -55,7 +55,7 @@ def execute_node(state: InvestigationState) -> dict:
           result = f"query_events failed: {str(e)}"
 
       return {
-          "severities_tried": severities_tried + [chosen_severity],
+          "severities_tried": [chosen_severity],
           "checked_this_step": f"severity={chosen_severity}",
           "tool_result": str(result)[:1000]
       }
@@ -70,7 +70,7 @@ def execute_node(state: InvestigationState) -> dict:
           result = f"query_events failed: {str(e)}"
 
       return {
-          "routes_tried": routes_tried + [chosen_route],
+          "routes_tried": [chosen_route],
           "checked_this_step": f"route={chosen_route}",
           "tool_result": str(result)[:1000]
       }

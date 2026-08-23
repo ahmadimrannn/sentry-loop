@@ -40,7 +40,6 @@ def summarize_node(state: InvestigationState) -> dict:
     summary_text = current_summary
 
   evidence_entry = {"checked": checked_this_step, "findings": finding_text}
-  updated_evidence_log = evidence_log + [evidence_entry]
 
   if combined is None:
     has_unexplored_lead = True
@@ -53,7 +52,7 @@ def summarize_node(state: InvestigationState) -> dict:
     has_unexplored_lead = combined.has_unexplored_lead and still_has_unexplored
 
   return {
-    "evidence_log": updated_evidence_log,
+    "evidence_log": [evidence_entry],
     "previous_hypothesis": previous_hypothesis,
     "current_hypothesis": current_hypothesis,
     "investigation_summary": summary_text,
