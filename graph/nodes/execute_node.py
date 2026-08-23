@@ -1,0 +1,84 @@
+from graph.state.state import InvestigationState
+from config.settings import ALL_SEVERITIES
+from tools.query_events import query_events
+from tools.query_metrics import query_metrics
+from tools.checks_service_status import checks_service_health_status
+
+def execute_node(state: InvestigationState) -> dict:
+  decision = state.get('pending_decision', {})
+  if not isinstance(decision, dict):
+      decision = decision.model_dump() if hasattr(decision, 'model_dump') else {}
+
+  service_name = state.get("service", "")
+  metrics_checked = bool(state.get("metrics_checked", False))
+  service_status_checked = bool(state.get("service_status_checked", False))
+  severities_tried = list(state.get('severities_tried', []))
+  routes_tried = list(state.get('routes_tried', []))
+  known_routes = state.get('known_routes', [])
+
+  severities_left = [s for s in ALL_SEVERITIES if s not in severities_tried]
+  routes_left = [r for r in known_routes if r not in routes_tried]
+
+  tool_choice = decision.get('tool')
+
+  if tool_choice == "checks_service_health_status" and not service_status_checked:
+      try:
+          result = checks_service_health_status(service=service_name)
+      except Exception as e:
+          result = f"checks_service_health_status failed: {str(e)}"
+
+      return {
+          "service_status_checked": True,
+          "checked_this_step": "checks_service_health_status",
+          "tool_result": str(result)[:1000]
+      }
+
+  elif tool_choice == "query_metrics" and not metrics_checked:
+      try:
+          result = query_metrics(service=service_name)
+      except Exception as e:
+          result = f"query_metrics failed: {str(e)}"
+
+      return {
+          "metrics_checked": True,
+          "checked_this_step": "query_metrics",
+          "tool_result": str(result)[:1000]
+      }
+
+  elif severities_left:
+      requested_severity = decision.get('severity')
+      chosen_severity = requested_severity if requested_severity in severities_left else severities_left[0]
+
+      try:
+          result = query_events(service=service_name, severity=chosen_severity, limit=10)
+      except Exception as e:
+          result = f"query_events failed: {str(e)}"
+
+      return {
+          "severities_tried": severities_tried + [chosen_severity],
+          "checked_this_step": f"severity={chosen_severity}",
+          "tool_result": str(result)[:1000]
+      }
+
+  elif routes_left:
+      requested_route = decision.get('node_or_route')
+      chosen_route = requested_route if requested_route in routes_left else routes_left[0]
+
+      try:
+          result = query_events(service=service_name, node_or_route=chosen_route, limit=10)
+      except Exception as e:
+          result = f"query_events failed: {str(e)}"
+
+      return {
+          "routes_tried": routes_tried + [chosen_route],
+          "checked_this_step": f"route={chosen_route}",
+          "tool_result": str(result)[:1000]
+      }
+
+  else:
+      return {
+          "has_unexplored_lead": False,
+          "checked_this_step": "none",
+          "tool_result": "No unexplored leads remaining.",
+          "step_count": state.get('step_count', 0) + 1
+      }
