@@ -22,4 +22,7 @@ class InvestigationState(TypedDict):
   evidence_log: Annotated[list, operator.add]
   checked_this_step: str
 
+  proposed_change: str
+  is_fix_proposed: bool
+
   route: str
