@@ -59,3 +59,16 @@ def generate_learned_something_new_prompt(state):
   """
 
   return prompt
+
+def generate_fix_proposal_prompt(evidence_log, investigation_summary, current_hypothesis):
+
+  prompt = f"""
+    You are a senior fix proposal writer.
+    Based on these properties, write a clear, structured, organized, and detailed fix proposal so anyone who reads that can perform the fix easily. Also reference the problem with the fix you give for. Write in clear steps if possible. Also make sure the proposal is not too long and not too short. Always be specific
+
+    Evidence Log: {evidence_log}
+    Investigation Summary: {investigation_summary}
+    Current Hypothesis: {current_hypothesis}
+  """
+
+  return prompt
