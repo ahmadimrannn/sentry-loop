@@ -3,6 +3,7 @@ from graph.state.state import InvestigationState
 from graph.nodes.decide_node import decide_node
 from graph.nodes.execute_node import execute_node
 from graph.nodes.summarize_node import summarize_node
+from graph.nodes.propose_fix_node import propose_fix_node
 from graph.router.route_after_summarizer import route_after_summarize
 from graph.router.select_route_after_decide import select_route_after_decide
 
@@ -12,6 +13,7 @@ def build_graph():
   graph.add_node("decide", decide_node)
   graph.add_node("execute", execute_node)
   graph.add_node("summarize", summarize_node)
+  graph.add_node("propose_fix", propose_fix_node)
 
   graph.set_entry_point("decide")
 
@@ -31,9 +33,11 @@ def build_graph():
     route_after_summarize,
     {
       "decide": "decide", 
-      "end": END
+      "propose_fix": "propose_fix"
     }
   )
+
+  graph.add_edge("propose_fix", END)
 
   return graph.compile()
 
