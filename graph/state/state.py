@@ -24,5 +24,8 @@ class InvestigationState(TypedDict):
 
   proposed_change: str
   is_fix_proposed: bool
+  human_decision: str
+  final_status: str
+  proposal_id: str
 
   route: str
