@@ -12,7 +12,7 @@ def route_after_summarize(state: InvestigationState) -> str:
 
     step_count = state.get('step_count', 0)
     if step_count >= MAX_STEPS:
-        return "end"
+        return "propose_fix"
 
     previous_hypothesis = state.get('previous_hypothesis')
     if not previous_hypothesis:
@@ -22,7 +22,7 @@ def route_after_summarize(state: InvestigationState) -> str:
     try:
         evidence_check = evidence_llm.invoke(evidence_prompt)
         if evidence_check and evidence_check.confident_enough:
-            return "end"
+            return "propose_fix"
     except Exception:
         evidence_check = None
 
@@ -33,8 +33,8 @@ def route_after_summarize(state: InvestigationState) -> str:
     try:
         check = progress_llm.invoke(progress_prompt)
         if not check.learned_something_new:
-            return "end"
+            return "propose_fix"
     except Exception:
-        return "end"
+        return "propose_fix"
 
     return "decide"
