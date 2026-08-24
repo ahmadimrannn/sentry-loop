@@ -4,8 +4,11 @@ from graph.nodes.decide_node import decide_node
 from graph.nodes.execute_node import execute_node
 from graph.nodes.summarize_node import summarize_node
 from graph.nodes.propose_fix_node import propose_fix_node
+from graph.nodes.finalize_node import finalize_node
 from graph.router.route_after_summarizer import route_after_summarize
 from graph.router.select_route_after_decide import select_route_after_decide
+
+from database.config import checkpointer
 
 def build_graph():
   graph = StateGraph(InvestigationState)
@@ -14,6 +17,7 @@ def build_graph():
   graph.add_node("execute", execute_node)
   graph.add_node("summarize", summarize_node)
   graph.add_node("propose_fix", propose_fix_node)
+  graph.add_node("finalize", finalize_node)
 
   graph.set_entry_point("decide")
 
@@ -37,9 +41,10 @@ def build_graph():
     }
   )
 
-  graph.add_edge("propose_fix", END)
+  graph.add_edge("propose_fix", "finalize")
+  graph.add_edge("finalize", END)
 
-  return graph.compile()
+  return graph.compile(checkpointer=checkpointer)
 
 
 graph = build_graph()
