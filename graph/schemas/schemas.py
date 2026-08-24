@@ -19,3 +19,6 @@ class EvidenceAndHypothesis(BaseModel):
   updated_hypothesis: str = Field(description="best guess so far at what is wrong, in plain words")
   has_unexplored_lead: bool = Field(description="true if you know a specific next thing to check that you have not checked yet")
 
+class FixProposal(BaseModel):
+  proposed_change: str = Field(description="A concrete fix proposal detailing what code, configuration, or file needs to be modified, added, or removed to resolve the issue.")
+
