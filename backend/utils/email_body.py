@@ -1,4 +1,4 @@
-def generate_email_body(investigation_summary, proposed_change, approve_url, reject_url):
+def generate_email_body(investigation_summary, proposed_change, approve_url, reject_url, reminder_banner):
 
     html = f"""
     <!DOCTYPE html>
@@ -27,6 +27,9 @@ def generate_email_body(investigation_summary, proposed_change, approve_url, rej
 
                     <!-- Section 1: Summary -->
                     <table width="100%" border="0" cellpadding="0" cellspacing="0" style="margin-bottom: 32px;">
+                        <tr>
+                            {reminder_banner}
+                        </tr>
                         <tr>
                             <td>
                                 <h2 style="margin: 0 0 12px 0; font-size: 14px; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; color: #1d1d1f; border-bottom: 1px solid #f2f2f7; padding-bottom: 8px;">

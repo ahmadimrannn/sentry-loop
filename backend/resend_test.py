@@ -1,14 +1,5 @@
-import time
+import secrets
 
+secret = secrets.token_hex(8)
 
-LINK_TTL_SECONDS = 60*60*24*3
-TIME = int(time.time()) + LINK_TTL_SECONDS
-
-print(TIME)
-
-secret = 'cjkdjfuae9u93938493fdjkjc839iii'
-
-sec = secret.encode()
-print(sec)
-dec_sec = sec.decode()
-print(dec_sec)
+print(secret)

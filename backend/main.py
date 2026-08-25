@@ -1,8 +1,12 @@
+import os
 from fastapi import FastAPI
+from fastapi import Header
 from fastapi.responses import HTMLResponse
 from utils.signing import verify_token
 from utils.render_decision_page import render_decision_page
 from tools.update_proposal_status import update_proposal_status
+from tools.proposal_reminders import get_stale_pending_proposals, mark_reminder_sent
+from tools.send_approval_email import send_approval_email
 from graph.execute_graph import graph
 from langgraph.types import Command
 
@@ -10,6 +14,26 @@ app = FastAPI(
     title="Sentry Loop",
     description="Autonomous Agent that investigates production incidents by querying logs, metrics, and service health, dynamically testing hypotheses to identify root causes."
 )
+
+@app.get("/api/remind-stale")
+def remind_stale(authorization: str = Header(default=None)):
+    expected = f"Bearer {os.getenv('CRON_SECRET')}"
+    if authorization != expected:
+        return HTMLResponse("Unauthorized", status_code=401)
+
+    stale = get_stale_pending_proposals(threshold_days=3)
+
+    for row in stale:
+        send_approval_email(
+            proposal_id=row["id"],
+            proposed_change=row["proposed_change"],
+            investigation_summary=row["investigation_summary"],
+            thread_id=row["thread_id"],
+            is_reminder=True,
+        )
+        mark_reminder_sent(row["id"])
+
+    return {"reminders_sent": len(stale)}
 
 @app.get("/api/decide", response_class=HTMLResponse)
 def decide(token: str):

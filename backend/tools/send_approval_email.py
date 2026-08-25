@@ -7,7 +7,7 @@ from utils.email_body import generate_email_body
 
 logger = logging.getLogger(__name__)
 
-def send_approval_email(proposal_id: str | int, proposed_change: str, investigation_summary: str) -> dict[str, bool]:
+def send_approval_email(proposal_id: str | int, proposed_change: str, investigation_summary: str, is_reminder = False) -> dict[str, bool]:
     # Ensure API Key and Base URL exist at runtime
     api_key = os.getenv("RESEND_API_KEY")
     base_url = os.getenv("WEBHOOK_BASE_URL")
@@ -27,13 +27,20 @@ def send_approval_email(proposal_id: str | int, proposed_change: str, investigat
     approve_url = f"{base_url}/api/decide?token={approve_token}"
     reject_url = f"{base_url}/api/decide?token={reject_token}"
 
+    reminder_banner = (
+        "<p style='color:#e67e22;font-weight:bold;'>"
+        "Reminder: this proposal was sent earlier and hasn't been acted on yet."
+        "</p>" if is_reminder else ""
+    )
+    subject_prefix = "[Reminder] " if is_reminder else ""
+
     try:
         # Note: Replace 'onboarding@resend.dev' with your verified domain in production (e.g., 'approvals@yourdomain.com')
         resend.Emails.send({
             "from": os.getenv("FROM_EMAIL", "onboarding@resend.dev"),
             "to": [recipient],
-            "subject": f"SentryLoop: Fix proposed for proposal ID: ({proposal_id})",
-            "html": generate_email_body(investigation_summary, proposed_change, approve_url, reject_url)
+            "subject": f"{subject_prefix}SentryLoop: Fix proposed for proposal ID: ({proposal_id})",
+            "html": generate_email_body(investigation_summary, proposed_change, approve_url, reject_url, reminder_banner)
         })
         return {"email_sent": True}
     except Exception as e:
