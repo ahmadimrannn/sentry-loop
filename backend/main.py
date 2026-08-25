@@ -52,7 +52,7 @@ def decide(token: str):
         title=f"Proposal {status_verb}",
         subtitle=f"Your decision has been logged and the autonomous execution workflow has resumed.",
         detail_label="Execution Reference",
-        detail_value=f"ID: {proposal_id} | Thread: {thread_id}",
+        detail_value=f"Proposal ID: {proposal_id} | Thread ID: {thread_id}",
         status_color=status_color
     )
 
