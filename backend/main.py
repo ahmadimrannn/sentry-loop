@@ -5,7 +5,8 @@ from fastapi.responses import HTMLResponse
 from utils.signing import verify_token
 from utils.render_decision_page import render_decision_page
 from tools.update_proposal_status import update_proposal_status
-from tools.proposal_reminders import get_stale_pending_proposals, mark_reminder_sent
+from tools.proposal_reminders import get_stale_pending_proposals, increment_reminder_count
+from tools.send_auto_reject_notice import send_auto_reject_notice
 from tools.send_approval_email import send_approval_email
 from graph.execute_graph import graph
 from langgraph.types import Command
@@ -17,23 +18,37 @@ app = FastAPI(
 
 @app.get("/api/remind-stale")
 def remind_stale(authorization: str = Header(default=None)):
-    expected = f"Bearer {os.getenv('CRON_SECRET')}"
-    if authorization != expected:
+    expected_secret = os.getenv("CRON_SECRET")
+    if not expected_secret or authorization != f"Bearer {expected_secret}":
         return HTMLResponse("Unauthorized", status_code=401)
 
     stale = get_stale_pending_proposals(threshold_days=3)
+    reminders_sent = 0
+    auto_rejected = 0
 
     for row in stale:
-        send_approval_email(
-            proposal_id=row["id"],
-            proposed_change=row["proposed_change"],
-            investigation_summary=row["investigation_summary"],
-            thread_id=row["thread_id"],
-            is_reminder=True,
-        )
-        mark_reminder_sent(row["id"])
+        if row["reminder_count"] >= 3:
+            try:
+                updated = update_proposal_status(row["id"], "rejected")
+            except ValueError:
+                continue
 
-    return {"reminders_sent": len(stale)}
+            config = {"configurable": {"thread_id": updated["thread_id"]}}
+            graph.invoke(Command(resume="reject"), config=config)
+            send_auto_reject_notice(row["id"], row["proposed_change"])
+            auto_rejected += 1
+        else:
+            send_approval_email(
+                proposal_id=row["id"],
+                proposed_change=row["proposed_change"],
+                investigation_summary=row["investigation_summary"],
+                thread_id=row["thread_id"],
+                is_reminder=True,
+            )
+            increment_reminder_count(row["id"])
+            reminders_sent += 1
+
+    return {"reminders_sent": reminders_sent, "auto_rejected": auto_rejected}
 
 @app.get("/api/decide", response_class=HTMLResponse)
 def decide(token: str):
@@ -44,7 +59,7 @@ def decide(token: str):
             subtitle="This decision token is invalid or has expired. No changes were applied to the pipeline.",
             detail_label="Status Code",
             detail_value="400 — INVALID_TOKEN",
-            status_color="#e53935"  # Muted Crimson
+            status_color="#e53935"
         )
         return HTMLResponse(content=html_content, status_code=400)
 
