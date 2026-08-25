@@ -1,5 +1,6 @@
 from langgraph.types import Command
 from graph.build_graph import graph
+from graph.execute_graph import thread_id
 
 def resume_graph(action: str, config: dict):
     """Resumes the graph after interruption."""
@@ -12,7 +13,7 @@ def resume_graph(action: str, config: dict):
 if __name__ == "__main__":
     config = {
         "configurable": {
-            "thread_id": "test-thread-5"
+            "thread_id": thread_id
         }
     }
 

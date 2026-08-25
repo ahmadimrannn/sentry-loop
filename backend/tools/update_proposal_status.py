@@ -1,8 +1,5 @@
 from tools.db import pool
-from utils.resilience import with_resilience
 
-
-@with_resilience()
 def update_proposal_status(proposal_id: int, new_status: str):
     """Flips a proposal's status after human review. Never deletes rows —
     rejected proposals stay in the table as eval/pattern data."""
