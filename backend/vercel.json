@@ -1,0 +1,8 @@
+{
+  "crons": [
+    {
+      "path": "/api/remind-stale",
+      "schedule": "0 9 * * *"
+    }
+  ]
+}
