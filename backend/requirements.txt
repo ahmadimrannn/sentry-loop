@@ -8,3 +8,4 @@ uvicorn
 psycopg
 pydantic
 python-dotenv
+resend

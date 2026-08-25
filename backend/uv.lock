@@ -1143,6 +1143,19 @@ wheels = [
 ]
 
 [[package]]
+name = "resend"
+version = "2.40.1"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "requests" },
+    { name = "typing-extensions" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/a8/5a/0e8a3a309f593d69c494aa54ad84458192b50f2d30fa126f483ea7f29b95/resend-2.40.1.tar.gz", hash = "sha256:528fb308d072546da009de7999673d2bcb53d34ca64c77e2ea1b677e75f37287", size = 59571, upload-time = "2026-08-24T20:18:06.964Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/33/a5/6e335f4c6f2322b7458971688233bb57d1e84ac27b866144db109123ab87/resend-2.40.1-py2.py3-none-any.whl", hash = "sha256:fe292445168e93b98848e67dd9ffa4b86edb855c7d7f4384080ebb8073ad5adc", size = 91696, upload-time = "2026-08-24T20:18:05.712Z" },
+]
+
+[[package]]
 name = "sentry-loop"
 version = "0.1.0"
 source = { virtual = "." }
@@ -1157,6 +1170,7 @@ dependencies = [
     { name = "psycopg-pool" },
     { name = "pydantic" },
     { name = "python-dotenv" },
+    { name = "resend" },
     { name = "uvicorn" },
 ]
 
@@ -1172,6 +1186,7 @@ requires-dist = [
     { name = "psycopg-pool", specifier = ">=3.3.1" },
     { name = "pydantic", specifier = ">=2.13.4" },
     { name = "python-dotenv", specifier = ">=1.2.3" },
+    { name = "resend", specifier = ">=2.40.1" },
     { name = "uvicorn", specifier = ">=0.52.3" },
 ]
 

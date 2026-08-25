@@ -1,6 +1,7 @@
 import json
 from tools.db import pool
 from utils.resilience import with_resilience
+from tools.send_approval_email import send_approval_email
 
 
 @with_resilience()
@@ -36,8 +37,7 @@ def propose_fix(investigation_summary: str, evidence: list[dict], proposed_chang
             """, (investigation_summary, evidence_json, proposed_change, thread_id))
             row = cur.fetchone()
 
-    # TODO Phase 5 step 2: send approval email here, only reached on a real insert
-    # (never on the existing-row branch above), so it can't double-send on resume replay.
+    send_approval_email(row['id'], proposed_change, investigation_summary)
 
     return row
 
@@ -48,5 +48,6 @@ if __name__ == "__main__":
             {"event_type": "api_exception", "node_or_route": "/leads", "message": "consuming input failed: SSL connection has been closed unexpectedly"},
         ],
         proposed_change="Enable connection health checks on the psycopg_pool ConnectionPool so dead pooled connections are discarded before being handed to a query, instead of failing mid-request.",
+        thread_id="test-thread-7"
     )
     print(result)

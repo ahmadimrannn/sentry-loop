@@ -16,7 +16,7 @@ def update_proposal_status(proposal_id: int, new_status: str):
                 UPDATE proposals
                 SET status = %s
                 WHERE id = %s AND status = 'pending_approval'
-                RETURNING id, status
+                RETURNING id, status, thread_id
             """, (new_status, proposal_id))
             row = cur.fetchone()
 
