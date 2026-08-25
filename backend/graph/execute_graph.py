@@ -24,7 +24,7 @@ def run_investigation(incident_text: str, service: str) -> dict:
 
     config = {
         "configurable": {
-            "thread_id": "test-thread-5"
+            "thread_id": "test-thread-13"
         }
     }
     for state_snapshot in graph.stream(initial_state, config, stream_mode="values"):

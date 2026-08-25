@@ -1,6 +1,7 @@
 import resend
 import os
 from utils.signing import sign_decision
+from utils.email_body import generate_email_body
 
 resend.api_key = os.getenv("RESEND_API_KEY")
 
@@ -17,18 +18,8 @@ def send_approval_email(proposal_id, proposed_change, investigation_summary):
         resend.Emails.send({
             "from": "onboarding@resend.dev",
             "to": os.getenv("APPROVAL_EMAIL"),
-            "subject": f"SentryLoop: fix proposed for proposal {proposal_id}",
-            "html": f"""
-                <h3>Investigation summary</h3>
-                <p>{investigation_summary}</p>
-                <h3>Proposed change</h3>
-                <p>{proposed_change}</p>
-                <p>
-                    <a href="{approve_url}" style="padding:10px 20px;background:#2ecc71;color:white;text-decoration:none;">Approve</a>
-                    &nbsp;
-                    <a href="{reject_url}" style="padding:10px 20px;background:#e74c3c;color:white;text-decoration:none;">Reject</a>
-                </p>
-            """
+            "subject": f"SentryLoop: Fix proposed for proposal. Proposal ID: ({proposal_id})",
+            "html": generate_email_body(investigation_summary, proposed_change, approve_url, reject_url)
         })
         email_sent = True
     except Exception as e:

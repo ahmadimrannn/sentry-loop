@@ -37,7 +37,8 @@ def propose_fix(investigation_summary: str, evidence: list[dict], proposed_chang
             """, (investigation_summary, evidence_json, proposed_change, thread_id))
             row = cur.fetchone()
 
-    send_approval_email(row['id'], proposed_change, investigation_summary)
+    email_sent = send_approval_email(row['id'], proposed_change, investigation_summary)
+    print(email_sent)
 
     return row
 
