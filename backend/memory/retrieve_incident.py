@@ -1,5 +1,5 @@
 from tools.db import pool
-from memory.write_incident import embed_text
+from tools.get_embeddings import get_embedding
 from api.event_logger import log_event
 from config.settings import TOP_K, MAX_DISTANCE
 
@@ -7,7 +7,7 @@ def retrieve_similar_incidents(service: str, severity: str, incident: str):
     query_text = f"service: {service}, severity: {severity}, incident: {incident}"
 
     try:
-        query_embedding = embed_text(query_text)
+        query_embedding = get_embedding(query_text)
     except Exception as e:
         log_event(
             service="sentryloop",

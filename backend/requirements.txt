@@ -9,5 +9,6 @@ psycopg
 pydantic
 python-dotenv
 resend
-sentence-transformers
-torch
+fastembed
+numpy
+huggingface-hub

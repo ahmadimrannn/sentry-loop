@@ -2,14 +2,7 @@ from tools.db import pool
 from utils.resilience import with_resilience
 from sentence_transformers import SentenceTransformer
 from api.event_logger import log_event
-
-# load the embedding model once at import time, not inside the function
-_model = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2")
-
-
-@with_resilience()
-def embed_text(text: str) -> list[float]:
-    return _model.encode(text, normalize_embeddings=True).tolist()
+from tools.get_embeddings import get_embedding
 
 
 def write_incident(
@@ -25,7 +18,7 @@ def write_incident(
     embedded_text = f"{investigation_summary}\n{proposed_change or ''}".strip()
 
     try:
-        embedding = embed_text(embedded_text)
+        embedding = get_embedding(embedded_text)
     except Exception as e:
         embedding = None
         log_event(
