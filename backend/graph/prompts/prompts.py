@@ -1,6 +1,19 @@
-def generate_tool_selection_prompt(incident, current_hypothesis, severities_tried, routes_tried, metrics_checked, service_status_checked, severities_left, routes_left):
-  prompt = f"""
+def generate_tool_selection_prompt(incident, current_hypothesis, severities_tried, routes_tried, metrics_checked, service_status_checked, severities_left, routes_left, retrieved_incidents=None):
+    memory_block = ""
+    if not current_hypothesis and retrieved_incidents:
+        formatted = "\n".join(
+            f"- [{r['final_status']}, {r['reached_via']}] {r['investigation_summary']}"
+            + (f" | Fix proposed: {r['proposed_change']}" if r['proposed_change'] else "")
+            for r in retrieved_incidents
+        )
+        memory_block = f"""
+            Possibly related past incidents (unverified leads, not conclusions — confirm with real evidence before treating any of these as fact):
+            {formatted}
+        """
+
+    prompt = f"""
     Incident: {incident}
+    {memory_block}
     Current hypothesis: {current_hypothesis}
     Severities already checked: {severities_tried or 'None'}
     Routes already checked: {routes_tried or 'None'}
@@ -11,7 +24,7 @@ def generate_tool_selection_prompt(incident, current_hypothesis, severities_trie
     If query_events, specify either a severity from {severities_left} or a route from {routes_left}.
     """
 
-  return prompt
+    return prompt
 
 def generate_evidence_hypothesis_prompt(checked_this_step, result, investigation_summary):
   prompt = f"""
@@ -60,15 +73,17 @@ def generate_learned_something_new_prompt(state):
 
   return prompt
 
-def generate_fix_proposal_prompt(evidence_log, investigation_summary, current_hypothesis):
+def generate_fix_proposal_prompt(evidence_log, investigation_summary, current_hypothesis, status_after_routing):
 
   prompt = f"""
     You are a senior fix proposal writer.
-    Based on these properties, write a clear, structured, organized, and detailed fix proposal so anyone who reads that can perform the fix easily. Also reference the problem with the fix you give for. Write in clear steps if possible. Also make sure the proposal is not too long and not too short. Always be specific
+    Based on these properties, write a clear, structured, organized, and detailed fix proposal so anyone who reads that can perform the fix easily. Also reference the problem with the fix you give for. Write in clear steps if possible. Also make sure the proposal is not too long and not too short. Always be specific.
 
     Evidence Log: {evidence_log}
     Investigation Summary: {investigation_summary}
     Current Hypothesis: {current_hypothesis}
+
+    Write this note at the start if the status after routing is step limit exceeded. Status after routing: {status_after_routing} {"NOTE: Investigation inconclusive after 15 steps, evidence gathered so far attached, manual review recommended" if status_after_routing == "step_limit_exceeded" else ""}
   """
 
   return prompt

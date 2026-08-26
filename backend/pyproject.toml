@@ -16,5 +16,7 @@ dependencies = [
     "pydantic>=2.13.4",
     "python-dotenv>=1.2.3",
     "resend>=2.40.1",
+    "sentence-transformers>=6.0.0",
+    "torch>=2.13.0",
     "uvicorn>=0.52.3",
 ]

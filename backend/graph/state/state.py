@@ -3,6 +3,7 @@ import operator
 
 class InvestigationState(TypedDict):
   step_count: int
+  retrieved_incidents: list
 
   service: str
   incident: str
@@ -21,6 +22,8 @@ class InvestigationState(TypedDict):
   routes_tried: Annotated[list, operator.add]
   evidence_log: Annotated[list, operator.add]
   checked_this_step: str
+
+  status_after_routing: str
 
   proposed_change: str
   is_fix_proposed: bool

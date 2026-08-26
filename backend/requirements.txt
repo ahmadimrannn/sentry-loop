@@ -9,3 +9,5 @@ psycopg
 pydantic
 python-dotenv
 resend
+sentence-transformers
+torch

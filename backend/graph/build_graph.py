@@ -1,5 +1,6 @@
 from langgraph.graph import StateGraph, END
 from graph.state.state import InvestigationState
+from graph.nodes.retrieve_memory_node import retrieve_memory_node
 from graph.nodes.decide_node import decide_node
 from graph.nodes.execute_node import execute_node
 from graph.nodes.summarize_node import summarize_node
@@ -13,14 +14,16 @@ from database.config import checkpointer
 def build_graph():
   graph = StateGraph(InvestigationState)
 
+  graph.add_node("retrieve_memory", retrieve_memory_node)
   graph.add_node("decide", decide_node)
   graph.add_node("execute", execute_node)
   graph.add_node("summarize", summarize_node)
   graph.add_node("propose_fix", propose_fix_node)
   graph.add_node("finalize", finalize_node)
 
-  graph.set_entry_point("decide")
+  graph.set_entry_point("retrieve_memory")
 
+  graph.add_edge("retrieve_memory", "decide")
   graph.add_conditional_edges(
     "decide",
     select_route_after_decide,
