@@ -1,9 +1,8 @@
-from tools.db import pool
-from utils.resilience import with_resilience
-from sentence_transformers import SentenceTransformer
-from api.event_logger import log_event
-from tools.get_embeddings import get_embedding
+# memory/write_incident.py
 
+from tools.db import pool
+from tools.get_embeddings import get_embedding
+from api.event_logger import log_event
 
 def write_incident(
     thread_id: str,
