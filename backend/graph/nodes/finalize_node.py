@@ -31,7 +31,7 @@ def finalize_node(state: InvestigationState, config: RunnableConfig) -> dict:
             message=f"write_incident raised for thread {state['thread_id']}",
             severity="error",
             node_or_route="finalize_node",
-            thread_id=state["thread_id"],
+            thread_id=thread_id,
             context={"error": str(e)},
         )
 
