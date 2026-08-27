@@ -12,3 +12,4 @@ resend
 fastembed
 numpy
 huggingface-hub
+pgvector
