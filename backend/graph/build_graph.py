@@ -18,6 +18,7 @@ def build_graph():
   graph.add_node("decide", decide_node)
   graph.add_node("execute", execute_node)
   graph.add_node("summarize", summarize_node)
+  graph.add_node("route_after_summarize", route_after_summarize)
   graph.add_node("propose_fix", propose_fix_node)
   graph.add_node("finalize", finalize_node)
 
@@ -34,16 +35,7 @@ def build_graph():
   )
 
   graph.add_edge("execute", "summarize")
-
-  graph.add_conditional_edges(
-    "summarize",
-    route_after_summarize,
-    {
-      "decide": "decide", 
-      "propose_fix": "propose_fix"
-    }
-  )
-
+  graph.add_edge("summarize", "route_after_summarize")
   graph.add_edge("propose_fix", "finalize")
   graph.add_edge("finalize", END)
 
