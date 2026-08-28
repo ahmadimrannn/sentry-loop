@@ -3,8 +3,8 @@ from tools.get_embeddings import get_embedding
 from api.event_logger import log_event
 from config.settings import TOP_K, MAX_DISTANCE
 
-def retrieve_similar_incidents(service: str, severity: str, incident: str):
-    query_text = f"service: {service}, severity: {severity}, incident: {incident}"
+def retrieve_similar_incidents(service: str, incident: str):
+    query_text = f"service: {service}, incident: {incident}"
 
     try:
         query_embedding = get_embedding(query_text)
@@ -24,7 +24,7 @@ def retrieve_similar_incidents(service: str, severity: str, incident: str):
             cur.execute(
                 """
                 SELECT investigation_summary, proposed_change, reached_via,
-                       final_status, embedding <=> %s::vector AS distance
+                       final_status, embedding <=> %s AS distance
                 FROM incidents
                 WHERE embedding IS NOT NULL
                 ORDER BY distance ASC
@@ -35,14 +35,6 @@ def retrieve_similar_incidents(service: str, severity: str, incident: str):
             rows = cur.fetchall()
 
     return [
-        {
-            "investigation_summary": r[0],
-            "proposed_change": r[1],
-            "reached_via": r[2],
-            "final_status": r[3],
-            "distance": r[4],
-        }
-        for r in rows
-        if r[4] <= MAX_DISTANCE
+        r for r in rows if r["distance"] <=MAX_DISTANCE
     ]
 
