@@ -3,8 +3,8 @@ from tools.get_embeddings import get_embedding
 from api.event_logger import log_event
 from config.settings import TOP_K, MAX_DISTANCE
 
-def retrieve_similar_incidents(service: str, incident: str):
-    query_text = f"service: {service}, incident: {incident}"
+def retrieve_similar_incidents(service: str, severity: str, incident: str):
+    query_text = f"service: {service}, severity: {severity}, incident: {incident}"
 
     try:
         query_embedding = get_embedding(query_text)

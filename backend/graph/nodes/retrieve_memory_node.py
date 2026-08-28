@@ -5,11 +5,13 @@ from langchain_core.runnables import RunnableConfig
 def retrieve_memory_node(state: dict, config: RunnableConfig) -> dict:
     service = state.get("service")
     incident = state.get("incident")
+    severity = state.get("severity")
     thread_id = config['configurable']['thread_id']
 
     try:
         results = retrieve_similar_incidents(
             service=service,
+            severity=severity,
             incident=incident
         )
     except Exception as e:
