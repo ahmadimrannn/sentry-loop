@@ -7,10 +7,8 @@ from api.event_logger import log_event
 def finalize_node(state: InvestigationState, config: RunnableConfig) -> dict:
     decision = state.get("human_decision")
     service = state.get("service")
-
     pending_decision = state.get("pending_decision", {})
     severity = pending_decision.get("severity")
-
     final_status = "approved" if decision == "approve" else "rejected"
 
     thread_id = config["configurable"]["thread_id"]
