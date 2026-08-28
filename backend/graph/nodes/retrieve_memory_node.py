@@ -17,7 +17,7 @@ def retrieve_memory_node(state: dict, config: RunnableConfig) -> dict:
     except Exception as e:
         results= []
         log_event(
-            service=service,
+            service="sentryloop",
             event_type="retrieve_similar_incidents_failed",
             message=str(e),
             severity="error",
