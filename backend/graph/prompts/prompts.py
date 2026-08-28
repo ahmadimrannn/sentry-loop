@@ -1,3 +1,17 @@
+def generate_classify_severity_prompt(incident_text: str, valid_severities: list[str]) -> str:
+    prompt = f"""
+    You are classifying the severity of an incident report.
+
+    Incident: {incident_text}
+
+    Choose exactly one severity from this list: {valid_severities}
+
+    Base your choice only on what the incident text actually says. If the text is vague or ambiguous, choose the severity that best reflects the described impact, don't default to the most alarming option just because the report is unclear.
+    """
+
+    return prompt
+
+
 def generate_tool_selection_prompt(incident, current_hypothesis, severities_tried, routes_tried, metrics_checked, service_status_checked, severities_left, routes_left, retrieved_incidents=None):
     memory_block = ""
     if not current_hypothesis and retrieved_incidents:

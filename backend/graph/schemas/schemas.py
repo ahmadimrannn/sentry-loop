@@ -1,6 +1,9 @@
 from pydantic import Field, BaseModel
 from typing_extensions import Literal
 
+class ClassifySeverity(BaseModel):
+  severity: Literal["error", "warning", "critical", "info"] = Field(description="The single best-fitting severity label for this incident.")
+
 class NextStep(BaseModel): # This schema is for run_investigation file
   tool: Literal["query_events", "query_metrics", "check_service_status"] = Field(description="which tool to use next")
   severity: Literal["error", "warning", "critical", "info"] = Field(description="only used if tool is query_events")
