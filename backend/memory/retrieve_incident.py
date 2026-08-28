@@ -24,11 +24,11 @@ def retrieve_similar_incidents(service: str, severity: str, incident: str):
             cur.execute(
                 """
                 SELECT investigation_summary, proposed_change, reached_via,
-                       final_status, embedding <=> %s::vector AS distance
+                       final_status, embedding <=> %s AS distance
                 FROM incidents
                 WHERE embedding IS NOT NULL
                 ORDER BY distance ASC
-                LIMIT %s::vector
+                LIMIT %s
                 """,
                 (query_embedding, TOP_K),
             )
