@@ -14,6 +14,7 @@ def decide_node(state: InvestigationState) -> dict:
   known_routes = state.get('known_routes', [])
   metrics_checked = bool(state.get("metrics_checked", False))
   service_status_checked = bool(state.get("service_status_checked", False))
+  retrieved_incidents = state.get("retrieved_incidents", [])
 
   severities_left = [s for s in ALL_SEVERITIES if s not in severities_tried]
   routes_left = [r for r in known_routes if r not in routes_tried]
@@ -34,7 +35,8 @@ def decide_node(state: InvestigationState) -> dict:
     metrics_checked,
     service_status_checked,
     severities_left,
-    routes_left
+    routes_left,
+    retrieved_incidents
   )
   
   try:
