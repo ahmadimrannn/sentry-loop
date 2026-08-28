@@ -7,7 +7,7 @@ from graph.nodes.execute_node import execute_node
 from graph.nodes.summarize_node import summarize_node
 from graph.nodes.propose_fix_node import propose_fix_node
 from graph.nodes.finalize_node import finalize_node
-from backend.graph.nodes.route_after_summarizer import route_after_summarize
+from graph.nodes.route_after_summarizer import route_after_summarize
 from graph.router.select_route_after_decide import select_route_after_decide
 
 from database.config import checkpointer
