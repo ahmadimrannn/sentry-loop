@@ -1,5 +1,6 @@
+from datetime import datetime, timedelta, timezone
 from graph.state.state import InvestigationState
-from config.settings import ALL_SEVERITIES
+from config.settings import ALL_SEVERITIES, EVENT_LOOKBACK_HOURS
 from tools.query_events import query_events
 from tools.query_metrics import query_metrics
 from tools.checks_service_status import checks_service_health_status
@@ -18,6 +19,8 @@ def execute_node(state: InvestigationState) -> dict:
 
   severities_left = [s for s in ALL_SEVERITIES if s not in severities_tried]
   routes_left = [r for r in known_routes if r not in routes_tried]
+
+  since_cutoff = datetime.now(timezone.utc) - timedelta(hours=EVENT_LOOKBACK_HOURS)
 
   tool_choice = decision.get('tool')
 
@@ -50,7 +53,7 @@ def execute_node(state: InvestigationState) -> dict:
       chosen_severity = requested_severity if requested_severity in severities_left else severities_left[0]
 
       try:
-          result = query_events(service=service_name, severity=chosen_severity, limit=10)
+          result = query_events(service=service_name, severity=chosen_severity, since=since_cutoff, limit=10)
       except Exception as e:
           result = f"query_events failed: {str(e)}"
 
@@ -65,7 +68,7 @@ def execute_node(state: InvestigationState) -> dict:
       chosen_route = requested_route if requested_route in routes_left else routes_left[0]
 
       try:
-          result = query_events(service=service_name, node_or_route=chosen_route, limit=10)
+          result = query_events(service=service_name, node_or_route=chosen_route, since=since_cutoff, limit=10)
       except Exception as e:
           result = f"query_events failed: {str(e)}"
 
