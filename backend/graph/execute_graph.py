@@ -99,8 +99,8 @@ if __name__ == "__main__":
 
     thread_id = str(uuid.uuid4())
     result = run_investigation_to_completion(
-        "Something's wrong across cognilead, not sure what, users are complaining but I can't tell if it's the lead pipeline, the CRM writes, or something else.",
-        "CogniLead",
+        "SentryLoop is creating trouble again, users are complaining about syncing problem, not sure what changed",
+        "SentryLoop",
         thread_id
     )
 
