@@ -1,5 +1,3 @@
-# memory/write_incident.py
-
 from tools.db import pool
 from tools.get_embeddings import get_embedding
 from api.event_logger import log_event
