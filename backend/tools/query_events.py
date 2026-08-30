@@ -45,5 +45,5 @@ since: datetime = None, limit: int = 50):
 
 
 if __name__ == "__main__":
-    response = query_events(service="lumen", limit=5)
+    response = query_events(service="lumen", node_or_route="researcher", limit=5)
     print(response)

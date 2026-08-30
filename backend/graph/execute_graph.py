@@ -60,7 +60,10 @@ def run_investigation(
             current_hypo = state_snapshot.get("current_hypothesis", "N/A")
 
             logger.info("[Step %s] Hypothesis: %s", current_step, current_hypo)
+            logger.debug("[Step %s] tool_result: %s", current_step, state_snapshot.get("tool_result"))
             final_state = state_snapshot
+            # Pause after each step to allow external observation/actions
+            sleep(2)
 
     except Exception as e:
         logger.exception(
@@ -112,10 +115,9 @@ if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)
 
     thread_id = str(uuid.uuid4())
-    result = run_investigation_to_completion(
-        "SentryLoop is creating trouble again, users are complaining about syncing problem, not sure what changed",
-        "SentryLoop",
-        thread_id
+    result = run_investigation(
+        service="lumen", incident_text="Researcher node crashes with KeyError: 'results' when calling the Tavily search tool during a query.",
+        thread_id=thread_id
     )
 
     print("\n================ FINAL RESULT ================")

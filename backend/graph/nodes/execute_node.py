@@ -4,6 +4,9 @@ from config.settings import ALL_SEVERITIES, EVENT_LOOKBACK_HOURS
 from tools.query_events import query_events
 from tools.query_metrics import query_metrics
 from tools.checks_service_status import checks_service_health_status
+import logging
+
+logger = logging.getLogger(__name__)
 
 def execute_node(state: InvestigationState) -> dict:
     decision = state.get('pending_decision', {})
@@ -33,28 +36,33 @@ def execute_node(state: InvestigationState) -> dict:
 
         tool_result_entry = {
             "step": step_count,
-            "result": str(result)[:1000]
+            "tool_name": decision['tool'],
+            "result": result
         }
+        logger.debug("execute_node: checks_service_health_status result=%s", tool_result_entry)
         return {
             "service_status_checked": True,
             "checked_this_step": "checks_service_health_status",
-            "tool_result": [tool_result_entry]
+            "tool_result": tool_result_entry
         }
 
     elif tool_choice == "query_metrics" and not metrics_checked:
         try:
             result = query_metrics(service=service_name)
+            print(result)
         except Exception as e:
             result = f"query_metrics failed: {str(e)}"
 
         tool_result_entry = {
             "step": step_count,
-            "result": str(result)[:1000]
+            "tool_name": decision['tool'],
+            "result": result
         }
+        logger.debug("execute_node: query_metrics result=%s", tool_result_entry)
         return {
             "metrics_checked": True,
             "checked_this_step": "query_metrics",
-            "tool_result": [tool_result_entry]
+            "tool_result": tool_result_entry
         }
 
     elif severities_left:
@@ -63,17 +71,20 @@ def execute_node(state: InvestigationState) -> dict:
 
         try:
             result = query_events(service=service_name, severity=chosen_severity, since=since_cutoff, limit=10)
+            print(result)
         except Exception as e:
             result = f"query_events failed: {str(e)}"
 
         tool_result_entry = {
             "step": step_count,
-            "result": str(result)[:1000]
+            "tool_name": decision['tool'],
+            "result": result
         }
+        logger.debug("execute_node: query_events (severity) result=%s", tool_result_entry)
         return {
             "severities_tried": [chosen_severity],
             "checked_this_step": f"severity={chosen_severity}",
-            "tool_result": [tool_result_entry]
+            "tool_result": tool_result_entry
         }
 
     elif routes_left:
@@ -87,12 +98,14 @@ def execute_node(state: InvestigationState) -> dict:
 
         tool_result_entry = {
             "step": step_count,
-            "result": str(result)[:1000]
+            "tool_name": decision['tool'],
+            "result": result
         }
+        logger.debug("execute_node: query_events (route) result=%s", tool_result_entry)
         return {
             "routes_tried": [chosen_route],
             "checked_this_step": f"route={chosen_route}",
-            "tool_result": [tool_result_entry]
+            "tool_result": tool_result_entry
         }
 
     else:
@@ -100,9 +113,10 @@ def execute_node(state: InvestigationState) -> dict:
             "step": step_count,
             "result": "No unexplored leads remaining."
         }
+        logger.debug("execute_node: no unexplored leads result=%s", tool_result_entry)
         return {
             "has_unexplored_lead": False,
             "checked_this_step": "none",
-            "tool_result": [tool_result_entry],
+            "tool_result": tool_result_entry,
             "step_count": state.get('step_count', 0) + 1
         }
