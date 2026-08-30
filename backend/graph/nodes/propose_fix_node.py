@@ -20,13 +20,14 @@ def propose_fix_node(state: InvestigationState, config: RunnableConfig) -> dict:
         proposal_id = existing["id"]
         is_fix_proposed = True
     else:
+        incident = state.get("incident", '')
         raw_evidence = state.get("evidence_log") or []
         evidence_log = list(raw_evidence)
         investigation_summary = state.get("investigation_summary", "")
         current_hypothesis = state.get("current_hypothesis", "")
         status_after_routing = state.get("status_after_routing", "")
 
-        prompt = generate_fix_proposal_prompt(evidence_log, investigation_summary, current_hypothesis, status_after_routing)
+        prompt = generate_fix_proposal_prompt(incident, evidence_log, investigation_summary, current_hypothesis, status_after_routing)
 
         try:
             res = structured_fixproposal_llm.invoke(prompt)

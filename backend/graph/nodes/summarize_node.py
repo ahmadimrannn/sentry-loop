@@ -13,7 +13,7 @@ def summarize_node(state: InvestigationState) -> dict:
   
   current_hypothesis = state.get('current_hypothesis') or 'None yet'
   previous_hypothesis = state.get('current_hypothesis')
-  evidence_log = list(state.get('evidence_log', []))
+  incident = state.get("incident", "")
 
   severities_tried = list(state.get('severities_tried', []))
   routes_tried = list(state.get('routes_tried', []))
@@ -21,7 +21,7 @@ def summarize_node(state: InvestigationState) -> dict:
   metrics_checked = bool(state.get("metrics_checked", False))
   service_status_checked = bool(state.get("service_status_checked", False))
 
-  combined_prompt = generate_evidence_hypothesis_prompt(checked_this_step, result, current_summary)
+  combined_prompt = generate_evidence_hypothesis_prompt(incident, checked_this_step, result, current_summary)
 
   try:
     combined = combined_llm.invoke(combined_prompt)
