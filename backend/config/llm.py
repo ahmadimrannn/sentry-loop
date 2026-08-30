@@ -5,5 +5,6 @@ from langchain_google_genai import ChatGoogleGenerativeAI
 load_dotenv()
 
 model = ChatGoogleGenerativeAI(
-  model=LLM_MODEL_NAME
+  model=LLM_MODEL_NAME,
+  temperature=0.2,
 )
