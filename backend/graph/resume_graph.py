@@ -1,5 +1,6 @@
 from langgraph.types import Command
 from graph.build_graph import graph
+from langfuse_config.handler import langfuse_handler
 
 
 def resume_graph(action: str, config: dict | None = None, thread_id: str | None = None):
@@ -11,7 +12,8 @@ def resume_graph(action: str, config: dict | None = None, thread_id: str | None 
         config = {
             "configurable": {
                 "thread_id": thread_id,
-            }
+            },
+            "callbacks": [langfuse_handler]
         }
 
     final_state = {}

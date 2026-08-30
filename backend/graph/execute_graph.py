@@ -6,6 +6,7 @@ from graph.build_graph import graph
 from tools.get_known_routes import get_known_routes
 from tools.propose_fix import get_proposal_by_thread_id
 from graph.resume_graph import resume_graph
+from langfuse_config.handler import langfuse_handler
 
 logger = logging.getLogger(__name__)
 
@@ -36,7 +37,10 @@ def run_investigation(
     }
 
     final_state: dict[str, Any] = {}
-    config = {"configurable": {"thread_id": active_thread_id}}
+    config = {
+        "configurable": {"thread_id": active_thread_id},
+        "callbacks": [langfuse_handler]
+    }
 
     try:
         for state_snapshot in graph.stream(
