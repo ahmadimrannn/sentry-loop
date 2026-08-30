@@ -11,7 +11,7 @@ class InvestigationState(TypedDict):
     previous_hypothesis: str
     current_hypothesis: str 
     pending_decision: dict
-    tool_result: str
+    tool_result: Annotated[list, operator.add]
     has_unexplored_lead: bool
     service_status_checked: bool
     metrics_checked: bool

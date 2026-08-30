@@ -33,7 +33,17 @@ def run_investigation(
         "routes_tried": [],
         "evidence_log": [],
         "retrieved_incidents": [],
-        "status_after_routing": ""
+        "status_after_routing": "",
+        "severity": "",
+        "pending_decision": {},
+        "tool_result": [],
+        "checked_this_step": "",
+        "proposed_change": "",
+        "is_fix_proposed": False,
+        "human_decision": "",
+        "final_status": "",
+        "proposal_id": "",
+        "route": "",
     }
 
     final_state: dict[str, Any] = {}
