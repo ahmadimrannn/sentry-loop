@@ -10,6 +10,7 @@ from tools.send_auto_reject_notice import send_auto_reject_notice
 from tools.send_approval_email import send_approval_email
 from graph.execute_graph import graph
 from langgraph.types import Command
+from langfuse_config.handler import langfuse_handler
 
 app = FastAPI(
     title="Sentry Loop",
@@ -33,7 +34,10 @@ def remind_stale(authorization: str = Header(default=None)):
             except ValueError:
                 continue
 
-            config = {"configurable": {"thread_id": updated["thread_id"]}}
+            config = {
+                "configurable": {"thread_id": updated["thread_id"]}, 
+                "callbacks": [langfuse_handler]
+            }
             graph.invoke(Command(resume="reject"), config=config)
             send_auto_reject_notice(row["id"], row["proposed_change"])
             auto_rejected += 1
@@ -79,7 +83,11 @@ def decide(token: str):
         return HTMLResponse(content=html_content, status_code=409)
 
     thread_id = row["thread_id"]
-    config = {"configurable": {"thread_id": thread_id}}
+    config = {
+        "configurable": {"thread_id": thread_id}, 
+        "callbacks": [langfuse_handler]
+    }
+
     graph.invoke(Command(resume=decision), config=config)
 
     # Success Response
