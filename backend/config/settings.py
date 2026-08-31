@@ -6,7 +6,7 @@ LLM_MODEL_NAME="gemini-3.5-flash-lite"
 
 ALL_SEVERITIES = ["error", "warning", "critical", "info"]
 FALLBACK_SEVERITY = "warning"
-EVENT_LOOKBACK_HOURS = 216 # to pull events under 24 hours
+EVENT_LOOKBACK_HOURS = 216
 
 TOP_K=3
 MAX_DISTANCE=0.5 # lower distance = more similar

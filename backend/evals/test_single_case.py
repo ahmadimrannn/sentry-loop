@@ -5,7 +5,7 @@ import uuid
 
 langfuse = Langfuse()
 
-CASE_ID_TO_TEST = "lumen-06"  # change to test a different case
+CASE_ID_TO_TEST = "lumen-05"  # change to test a different case
 
 
 def main():

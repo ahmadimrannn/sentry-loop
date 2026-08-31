@@ -5,7 +5,7 @@ from evals.eval_task import sentryloop_eval_task
 
 langfuse = Langfuse()
 
-OUTPUT_PATH = "evals/sweep_results.json"
+OUTPUT_PATH = "evals/sweep_results_new_prompts.json"
 
 def main():
     dataset = langfuse.get_dataset("sentryloop-incidents")

@@ -28,22 +28,22 @@ def generate_tool_selection_prompt(incident, current_hypothesis, severities_trie
         """
 
     prompt = f"""
-    Incident: {incident}
-    {memory_block}
-    Current hypothesis: {current_hypothesis}
-    Severities already checked: {severities_tried or 'None'}
-    Routes already checked: {routes_tried or 'None'}
-    Metrics checked: {metrics_checked}
-    Service status checked: {service_status_checked}
+        Incident: {incident}
+        {memory_block}
+        Current hypothesis: {current_hypothesis}
+        Severities already checked: {severities_tried or 'None'}
+        Routes already checked: {routes_tried or 'None'}
+        Metrics checked: {metrics_checked}
+        Service status checked: {service_status_checked}
 
-    Be deterministic: given the same incident, hypothesis, and checked/unchecked lists,
-    always make the same selection. Use a consistent rule rather than choosing arbitrarily
-    among equally plausible options — prefer whichever unchecked severity or route most
-    specifically matches the incident's stated symptom (error type, node name, or route
-    mentioned in the incident text) before checking broader or less specific options.
+        Be deterministic: given the same incident, hypothesis, and checked/unchecked lists,
+        always make the same selection. Use a consistent rule rather than choosing arbitrarily
+        among equally plausible options — prefer whichever unchecked severity or route most
+        specifically matches the incident's stated symptom (error type, node name, or route
+        mentioned in the incident text) before checking broader or less specific options.
 
-    Pick which tool to use next: query_events, query_metrics, or checks_service_health_status.
-    If query_events, specify either a severity from {severities_left} or a route from {routes_left}.
+        Pick which tool to use next: query_events, query_metrics, or checks_service_health_status.
+        If query_events, specify either a severity from {severities_left} or a route from {routes_left}.
     """
 
     return prompt
