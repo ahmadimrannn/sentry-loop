@@ -6,5 +6,4 @@ load_dotenv()
 
 model = ChatGoogleGenerativeAI(
   model=LLM_MODEL_NAME,
-  temperature=0.2,
 )
