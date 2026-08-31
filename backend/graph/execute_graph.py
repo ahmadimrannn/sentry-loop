@@ -63,7 +63,7 @@ def run_investigation(
             logger.debug("[Step %s] tool_result: %s", current_step, state_snapshot.get("tool_result"))
             final_state = state_snapshot
             # Pause after each step to allow external observation/actions
-            sleep(6)
+            sleep(4)
 
     except Exception as e:
         logger.exception(
