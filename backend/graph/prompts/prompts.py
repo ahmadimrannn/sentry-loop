@@ -4,6 +4,8 @@ def generate_classify_severity_prompt(incident_text: str, valid_severities: list
 
     Incident: {incident_text}
 
+    Be deterministic: given the same incident text, always classify it the same way.
+
     Choose exactly one severity from this list: {valid_severities}
 
     Base your choice only on what the incident text actually says. If the text is vague or ambiguous, choose the severity that best reflects the described impact, don't default to the most alarming option just because the report is unclear.
@@ -25,7 +27,7 @@ def generate_tool_selection_prompt(incident, current_hypothesis, severities_trie
             {formatted}
         """
 
-    prompt = f"""
+        prompt = f"""
     Incident: {incident}
     {memory_block}
     Current hypothesis: {current_hypothesis}
@@ -33,6 +35,12 @@ def generate_tool_selection_prompt(incident, current_hypothesis, severities_trie
     Routes already checked: {routes_tried or 'None'}
     Metrics checked: {metrics_checked}
     Service status checked: {service_status_checked}
+
+    Be deterministic: given the same incident, hypothesis, and checked/unchecked lists,
+    always make the same selection. Use a consistent rule rather than choosing arbitrarily
+    among equally plausible options — prefer whichever unchecked severity or route most
+    specifically matches the incident's stated symptom (error type, node name, or route
+    mentioned in the incident text) before checking broader or less specific options.
 
     Pick which tool to use next: query_events, query_metrics, or checks_service_health_status.
     If query_events, specify either a severity from {severities_left} or a route from {routes_left}.
@@ -76,6 +84,11 @@ def generate_evidence_hypothesis_prompt(incident, checked_this_step, result, inv
         dilute or compete with the direct match for prominence in the summary. If you
         mention them at all, clearly label them as separate, unrelated observations.
 
+        Be deterministic: given the same tool result and the same current investigation
+        summary, always reach the same DIRECT MATCH / CONTRIBUTING / UNRELATED
+        classification and the same rewritten summary in substance. Do not vary your
+        classification or wording arbitrarily between runs on identical input.
+
         Then write your current best hypothesis. The hypothesis must describe the cause
         of the incident specifically — not a general statement about the service's
         overall health.
@@ -100,6 +113,10 @@ def generate_evidence_prompt(state):
         different failure than the one described in the incident text does not count as
         support for this hypothesis, no matter how solid it looks on its own.
 
+        Be deterministic: given the same evidence and the same hypothesis, always reach
+        the same true/false answer. Do not vary your confidence judgment arbitrarily
+        between runs on identical input.
+
         Is this hypothesis specific and well-supported enough by the evidence to act on
         right now, even if other parts of the system have not been checked yet?
         Answer false if the evidence is thin, vague, the hypothesis is still a guess,
@@ -113,7 +130,9 @@ def generate_learned_something_new_prompt(state):
     prompt = f"""
         Old hypothesis: {state['previous_hypothesis']}
         New hypothesis: {state['current_hypothesis']}
-    
+
+        Be deterministic: given the same old and new hypothesis, always reach the same answer.
+
         Did the new hypothesis add any real new fact, detail, or narrower cause compared
         to the old one? Answer false if it is just the same idea said in different words.
     """
