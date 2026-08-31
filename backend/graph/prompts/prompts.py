@@ -27,7 +27,7 @@ def generate_tool_selection_prompt(incident, current_hypothesis, severities_trie
             {formatted}
         """
 
-        prompt = f"""
+    prompt = f"""
     Incident: {incident}
     {memory_block}
     Current hypothesis: {current_hypothesis}
