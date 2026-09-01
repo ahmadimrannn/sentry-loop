@@ -13,3 +13,4 @@ fastembed
 numpy
 huggingface-hub
 pgvector
+langchain-groq
