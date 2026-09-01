@@ -3,6 +3,7 @@ NO_PROGRESS_WINDOW=3 # This one is also for the investigator agent to stop
 SUMMARY_WORD_LIMIT=200
 
 LLM_MODEL_NAME="gemini-3.5-flash-lite"
+JUDGE_MODEL = "qwen/qwen3.6-27b"
 
 ALL_SEVERITIES = ["error", "warning", "critical", "info"]
 FALLBACK_SEVERITY = "warning"
