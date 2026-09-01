@@ -16,8 +16,8 @@
       "step_count": 2,
       "reached_via": "confident_enough_evidence_gathered",
       "error": null,
-      "your_blind_label": null,
-      "your_blind_justification": null
+      "your_blind_label": "wrong",
+      "your_blind_justification": "Investigation summary explicitly admits it never located the actual point of the empty-key lookup. Never names correction_map, reason, or is_thin. Proposed fix is generic defensive-access guidance (guard against empty-string keys anywhere), not the specific ordering bug (feedback dict built before the is_thin check)."
     },
     {
       "case_id": "lumen-03",
@@ -34,8 +34,8 @@
       "step_count": 2,
       "reached_via": "confident_enough_evidence_gathered",
       "error": null,
-      "your_blind_label": null,
-      "your_blind_justification": null
+      "your_blind_label": "partial",
+      "your_blind_justification": "Right symptoms named (IndexError, UnboundLocalError) but grounded only in aggregate counts, not the actual mechanism (no separated if/else branches for first-attempt vs retry). Proposed fix (bounds-check guard, initialize variables early) is generic defensive programming, not the specific structural fix of splitting into self-contained branches."
     },
     {
       "case_id": "lumen-01",
@@ -52,8 +52,8 @@
       "step_count": 3,
       "reached_via": "confident_enough_evidence_gathered",
       "error": null,
-      "your_blind_label": null,
-      "your_blind_justification": null
+      "your_blind_label": "correct",
+      "your_blind_justification": "Fix matches ground truth exactly: safe .get('results', []) access instead of direct indexing, with a graceful fallback. Even though the summary admits it didn't pinpoint the exact origin, the proposed fix correctly addresses the real mechanism (unverified response shape)."
     },
     {
       "case_id": "cognilead-01",
@@ -70,8 +70,8 @@
       "step_count": 2,
       "reached_via": "confident_enough_evidence_gathered",
       "error": null,
-      "your_blind_label": null,
-      "your_blind_justification": null
+      "your_blind_label": "correct",
+      "your_blind_justification": "Fix direction matches one of the two acceptable ground-truth options: guard the dict/row access so a missing field fails gracefully. Correctly scoped to the GET /leads/failed endpoint and its serialization logic."
     },
     {
       "case_id": "lumen-05",
@@ -88,8 +88,8 @@
       "step_count": 2,
       "reached_via": "confident_enough_evidence_gathered",
       "error": null,
-      "your_blind_label": null,
-      "your_blind_justification": null
+      "your_blind_label": "wrong",
+      "your_blind_justification": "Misattributed to lumen-04's mechanism (AIMessage object passed instead of string) — same failure as prior sweeps. Real root cause is a missing-argument self-call to supervisor_router(), never mentioned anywhere in the summary or fix. Grounded only in aggregate counts (4 unhandled exceptions), not the specific message text, which likely allowed the wrong mechanism to be pattern-matched in."
     },
     {
       "case_id": "cognilead-02",
@@ -106,8 +106,8 @@
       "step_count": 2,
       "reached_via": "confident_enough_evidence_gathered",
       "error": null,
-      "your_blind_label": null,
-      "your_blind_justification": null
+      "your_blind_label": "correct",
+      "your_blind_justification": "Directly grounded in the real seeded message text (thread eval-cognilead-02, resume_graph). Fix matches ground truth: check checkpoint existence before Command(resume=...), return a clear error instead of an unhandled KeyError."
     },
     {
       "case_id": "lumen-04",
@@ -124,8 +124,8 @@
       "step_count": 2,
       "reached_via": "confident_enough_evidence_gathered",
       "error": null,
-      "your_blind_label": null,
-      "your_blind_justification": null
+      "your_blind_label": "correct",
+      "your_blind_justification": "Fix matches ground truth exactly: extract .content from the AIMessage before passing to Tavily. Correctly names the TypeError: expected str, got AIMessage mechanism."
     },
     {
       "case_id": "lumen-06",
@@ -142,8 +142,8 @@
       "step_count": 2,
       "reached_via": "confident_enough_evidence_gathered",
       "error": null,
-      "your_blind_label": null,
-      "your_blind_justification": null
+      "your_blind_label": "correct",
+      "your_blind_justification": "Canary case holds: correctly identifies averaging as a structural aggregation flaw and proposes a real aggregation-method fix (variance penalty, median-based aggregation) rather than the known-insufficient fix of raising the threshold."
     }
   ]
 }

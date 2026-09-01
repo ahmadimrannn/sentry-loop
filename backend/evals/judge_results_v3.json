@@ -1,0 +1,53 @@
+{
+  "judge_prompt_version": "v3",
+  "results": [
+    {
+      "case_id": "lumen-02",
+      "bucket": "partial",
+      "justification": "The agent correctly identifies the KeyError caused by an empty string key but proposes a defensive .get() fallback rather than restructuring the control flow to move the early return before the unconditional lookup, which only patches the symptom instead of fixing the underlying execution order issue.",
+      "judge_error": null
+    },
+    {
+      "case_id": "lumen-03",
+      "bucket": "partial",
+      "justification": "The agent identifies the correct error types but proposes symptom-level fixes (bounds-checking and upfront variable initialization) instead of restructuring the control flow into separate if/else branches, which fails to address the actual root cause of improperly separated first-attempt and retry logic.",
+      "judge_error": null
+    },
+    {
+      "case_id": "lumen-01",
+      "bucket": "correct",
+      "justification": "The agent correctly identified that the crash stems from a missing 'results' key in the Tavily response and proposed using .get() with a fallback to safely handle the missing key, which directly aligns with the ground truth's requirement to validate the response shape instead of assuming a fixed structure.",
+      "judge_error": null
+    },
+    {
+      "case_id": "cognilead-01",
+      "bucket": "correct",
+      "justification": "The agent correctly identified the KeyError from accessing a missing field and proposed guarding the dictionary access, which directly matches one of the explicitly acceptable fix directions in the ground truth.",
+      "judge_error": null
+    },
+    {
+      "case_id": "lumen-05",
+      "bucket": "wrong",
+      "justification": "The agent proposes patching a TypeError by extracting text from an AIMessage object, which fails to address the ground truth's root cause of the researcher node incorrectly calling supervisor_router() directly; the correct fix requires removing the self-routing logic entirely rather than patching a type mismatch.",
+      "judge_error": null
+    },
+    {
+      "case_id": "cognilead-02",
+      "bucket": "correct",
+      "justification": "The agent correctly identified that the KeyError stems from attempting to resume without verifying checkpoint existence, and proposed the exact same mechanism of checking for the checkpoint first and returning a clear error instead of crashing.",
+      "judge_error": null
+    },
+    {
+      "case_id": "lumen-04",
+      "bucket": "correct",
+      "justification": "The agent correctly identified that the TypeError was caused by passing an AIMessage object instead of a plain string to the Tavily tool and proposed extracting the .content attribute, which exactly matches the ground truth mechanism and fix direction.",
+      "judge_error": null
+    },
+    {
+      "case_id": "lumen-06",
+      "bucket": "correct",
+      "justification": "The agent correctly identified the structural flaw of using a simple average to mask weak results and proposed changing the aggregation method to penalize variance and enforce score spread, which directly aligns with the ground truth's required fix direction.",
+      "judge_error": null
+    }
+  ]
+}
