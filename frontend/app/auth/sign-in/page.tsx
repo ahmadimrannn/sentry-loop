@@ -1,41 +1,34 @@
-'use client';
+import { LoginForm } from "@/components/login-form"
+import Image from 'next/image';
+import Link from 'next/link'
 
-import { useActionState } from 'react';
-import { signInWithEmail } from './actions';
-
-export default function SignInForm() {
-  const [state, formAction, isPending] = useActionState(signInWithEmail, null);
+export default async function SignInPage() {
 
   return (
-    <form action={formAction}
-      className="flex flex-col gap-5 min-h-screen items-center justify-center bg-gray-900">
-
-      <div className="w-sm">
-       <h1 className="mt-10 text-center text-2xl/9 font-bold text-white">Sign in to your account</h1>
-      </div>
-
-      <div className='flex flex-col gap-1.5 w-sm'>
-        <label htmlFor="email" className="block text-sm font-medium text-gray-100">Email address</label>
-        <input id="email" name="email" type="email" required placeholder="john@my-company.com"
-          className="block rounded-md w-full bg-white/5 px-2 py-1.5 placeholder:text-gray-500 text-white outline-1 outline-white/10  focus:outline-indigo-500"/>
-      </div>
-
-      <div className='flex flex-col gap-1.5 w-sm'>
-        <label htmlFor="password" className="block text-sm font-medium text-gray-100">Password</label>
-        <input id="password" name="password" type="password" required placeholder="*****"
-          className="block rounded-md w-full bg-white/5 px-2 py-1.5 placeholder:text-gray-500 text-white outline-1 outline-white/10  focus:outline-indigo-500"/>
-      </div>
-
-      {state?.error && (
-        <div className="rounded-md px-3 py-2 text-sm text-red-500">
-          {state.error}
+    <div className="grid min-h-svh lg:grid-cols-2">
+      <div className="flex flex-col gap-2 px-6 md:px-10">
+        <div className="flex justify-center gap-2 md:justify-start">
+          <Link href="/" className="flex items-center py-3 font-medium">
+            <div className="flex items-center justify-center rounded-md">
+              <Image src={"/logo_header.png"} width={40} height={40} alt='Sentry Loop Logo' />
+            </div>
+            <p className='font-sans'>Sentry Loop</p>
+          </Link>
         </div>
-      )}
-
-      <button type="submit" disabled={isPending}
-        className="flex w-sm justify-center rounded-md bg-indigo-500 px-3 py-1.5 text-sm/6 font-semibold text-white hover:bg-indigo-400">
-        Sign in
-      </button>
-    </form>
+        <div className="flex flex-1 items-center justify-center">
+          <div className="w-full max-w-xs">
+            <LoginForm/>
+          </div>
+        </div>
+      </div>
+      <div className="relative hidden bg-muted lg:block">
+        <Image
+          fill
+          src="/auth-page.png"
+          alt="Image"
+          className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
+        />
+      </div>
+    </div>
   );
 }
