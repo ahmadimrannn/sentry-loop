@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use server';
 
 import { auth } from '@/lib/auth/server';
@@ -47,8 +48,8 @@ export async function revokeSpecificSession(
       return { error: 'Session ID is required' };
     }
 
-    const { data, error } = await auth.revokeSession({
-      sessionId: sessionId.trim(),
+    const { error } = await auth.revokeSession({
+      token: sessionId.trim(),
     });
 
     if (error) {
@@ -82,7 +83,7 @@ export async function revokeSpecificSession(
  */
 export async function revokeAllOtherSessions(): Promise<SessionActionState> {
   try {
-    const { data, error } = await auth.revokeOtherSessions();
+    const { error } = await auth.revokeOtherSessions();
 
     if (error) {
       console.error('Revoke other sessions error:', {

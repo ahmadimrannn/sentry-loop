@@ -1,8 +1,18 @@
-export default async function Dashboard() {
+"use client";
 
+import { Button } from "@/components/ui/button"
+import signOut from '../auth/sign-out/actions'
+
+export default function Dashboard() {
+    const handleSignOut = async () => {
+        await signOut()
+    }
     return (
-        <h1>
+        <>
             Welcome to dashboard.
-        </h1>
+            <Button type="submit" onClick={handleSignOut}>
+                Sign Out
+            </Button>
+        </>
     )
 }

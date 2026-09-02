@@ -189,37 +189,40 @@ export async function signInWithEmail(
  * auth.signIn.social(options) - Sign in with OAuth provider
  * Returns authorization URL to redirect to
  */
+
 export async function signInWithSocial(provider: 'google' | 'github'): Promise<never> {
+  let targetUrl: string | null = null;
+
   try {
     const { data, error } = await auth.signIn.social({
       provider,
-      callbackURL: `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/auth/callback`,
+      callbackURL: `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000/dashboard'}/auth/callback`,
     });
 
-    if (error) {
+    if (error || !data) {
       console.error(`Sign in with ${provider} error:`, {
-        error: error.message,
+        error: error?.message || 'No data received',
         timestamp: new Date().toISOString(),
       });
-      return redirect(`/auth/sign-in?error=Failed to initiate ${provider} sign in`);
-    }
-
-    // The data should contain a URL to redirect to for OAuth authorization
-    if (data?.url) {
-      redirect(data.url);
-    } else if (data) {
-      // Some auth SDKs might put the URL directly in data
-      redirect(String(data));
+      targetUrl = `/auth/sign-in?error=Failed to initiate ${provider} sign in`;
     } else {
-      return redirect(`/auth/sign-in?error=No authorization URL received`);
+      // Handle response structure safely
+      targetUrl = (typeof data === 'string' ? data : data?.url) ?? null;
     }
   } catch (error) {
     console.error(`Unexpected ${provider} sign in error:`, {
       error,
       timestamp: new Date().toISOString(),
     });
-    return redirect(`/auth/sign-in?error=An unexpected error occurred`);
+    targetUrl = `/auth/sign-in?error=An unexpected error occurred`;
   }
+
+  // Execute redirect OUTSIDE the try/catch block
+  if (targetUrl) {
+    redirect(targetUrl);
+  }
+
+  throw new Error('Unhandled auth redirect state');
 }
 
 /**
