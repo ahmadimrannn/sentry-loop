@@ -31,8 +31,8 @@ export function SignupForm({
     <form className={cn("flex flex-col gap-4", className)} action={formAction} {...props}>
         <FieldGroup>
             <div className="flex flex-col items-center gap-2 text-center">
-            <h1 className="text-2xl font-bold">Create your account</h1>
-            <p className="text-sm text-balance text-muted-foreground">
+            <h1 className="text-3xl font-sans tracking-tight">Create your account</h1>
+            <p className="text-sm text-balance font-inter text-muted-foreground">
                 Fill in the form below to create your account
             </p>
             </div>
@@ -67,7 +67,7 @@ export function SignupForm({
                 required
                 className="bg-background"
             />
-            <FieldDescription>
+            <FieldDescription className="font-inter">
                 Must be at least 8 characters long.
             </FieldDescription>
             </Field>
@@ -79,7 +79,7 @@ export function SignupForm({
             )}
 
             <Field>
-            <Button type="submit" disabled={isPending} className="w-full">
+            <Button type="submit" disabled={isPending} className="w-full py-4">
                 {isPending ? "Creating Account..." : "Create Account"}
             </Button>
             </Field>
@@ -131,7 +131,7 @@ export function SignupForm({
                         </>
                     </Button>
                 </div>
-                <FieldDescription className="text-center">
+                <FieldDescription className="text-center font-inter">
                     Already have an account?{" "}
                     <a href="/auth/sign-in" className="underline underline-offset-4">
                     Sign in

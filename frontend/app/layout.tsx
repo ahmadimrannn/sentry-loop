@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Inter_Tight } from "next/font/google";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -7,8 +7,8 @@ const geistSans = Geist({
   subsets: ["latin"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const interTight = Inter_Tight({
+  variable: "--font-inter",
   subsets: ["latin"],
 });
 
@@ -22,7 +22,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html
     lang="en"
     suppressHydrationWarning
-    className={`${geistSans.variable} ${geistMono.variable} font-sans h-full antialiased`}
+    className={`${geistSans.variable} ${interTight.variable} font-sans h-full antialiased`}
     >
         <body 
             suppressHydrationWarning

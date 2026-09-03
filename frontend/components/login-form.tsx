@@ -30,8 +30,8 @@ export function LoginForm({
         <form className={cn("flex flex-col gap-4", className)} action={formAction} {...props}>
             <FieldGroup>
                 <div className="flex flex-col items-center gap-1 text-center">
-                <h1 className="text-2xl font-bold">Login to your account</h1>
-                <p className="text-sm text-balance text-muted-foreground">
+                <h1 className="text-3xl font-sans tracking-tight">Login to your account</h1>
+                <p className="text-sm text-balance font-inter text-muted-foreground">
                     Enter your email below to login to your account
                 </p>
                 </div>
@@ -50,7 +50,7 @@ export function LoginForm({
                     <FieldLabel htmlFor="password">Password</FieldLabel>
                     <a
                     href="/auth/forgot-password"
-                    className="ml-auto text-sm underline-offset-4 hover:underline"
+                    className="ml-auto font-inter text-sm underline-offset-4 hover:underline"
                     >
                     Forgot your password?
                     </a>
@@ -68,7 +68,7 @@ export function LoginForm({
                 </div>
                 )}
                 <Field>
-                <Button type="submit" disabled={isPending} className="w-full">
+                <Button type="submit" disabled={isPending} className="w-full py-4">
                     {isPending ? "Signing in..." : "Login"}
                 </Button>
                 </Field>
@@ -120,7 +120,7 @@ export function LoginForm({
                             </>
                         </Button>
                     </div>
-                    <FieldDescription className="text-center">
+                    <FieldDescription className="text-center font-inter">
                         Don&apos;t have an account?{" "}
                         <a href="/auth/sign-up" className="underline underline-offset-4">
                         Sign up
