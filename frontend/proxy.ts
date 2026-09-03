@@ -4,26 +4,20 @@ import { auth } from '@/lib/auth/server';
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // 1. Explicitly mark public routes (Home, API callbacks, Public Auth)
-  const isHomePage = pathname === '/';
-  const isAuthCallback = pathname.startsWith('/auth/callback') || pathname.startsWith('/api/auth');
+  // 1. ALLOW PUBLIC AUTH PATHS (Sign in, Sign up, OTP verification)
   const isPublicAuthRoute = 
     pathname.startsWith('/auth/sign-in') ||
     pathname.startsWith('/auth/sign-up') ||
-    pathname.startsWith('/auth/verify-otp');
+    pathname.startsWith('/auth/verify-otp')
 
-  // Allow home page and OAuth callbacks to load freely for ALL users
-  if (isHomePage || isAuthCallback) {
-    return NextResponse.next();
-  }
-
-  // 2. Handle Public Auth Pages (Sign-In / Sign-Up)
+  // If the user is navigating to an allowed public auth page, skip session checks
   if (isPublicAuthRoute) {
+    // Read session to see if already logged in
     const session = await auth.getSession({
       fetchOptions: { headers: request.headers },
     });
-
-    // If user is ALREADY logged in, send them to /dashboard
+    
+    // ONLY redirect if user is ALREADY fully authenticated and tries to visit sign-in/sign-up
     if (session?.data?.user && !pathname.includes('verify-otp')) {
       return NextResponse.redirect(new URL('/dashboard', request.url));
     }
@@ -31,23 +25,22 @@ export async function proxy(request: NextRequest) {
     return NextResponse.next();
   }
 
-  // 3. Protect Dashboard & Private Routes
-  const isProtectedRoute = pathname.startsWith('/dashboard')
+  // 2. CHECK SESSION FOR PROTECTED ROUTES
+  const session = await auth.getSession({
+    fetchOptions: { headers: request.headers },
+  });
 
-  if (isProtectedRoute) {
-    const session = await auth.getSession({
-      fetchOptions: { headers: request.headers },
-    });
+  const isAuthenticated = Boolean(session?.data?.user);
 
-    if (!session?.data?.user) {
-      return NextResponse.redirect(new URL('/auth/sign-in', request.url));
-    }
-
-    return NextResponse.next();
+  // 3. REDIRECT UNAUTHENTICATED USERS TO SIGN-IN
+  if (!isAuthenticated && pathname.startsWith('/dashboard')) {
+    return NextResponse.redirect(new URL('/auth/sign-in', request.url));
   }
 
-  // 4. Default fallthrough for any other unrecognized route
-  return NextResponse.next();
+  // 4. DELEGATE TO NEON AUTH MIDDLEWARE
+  return auth.middleware({
+    loginUrl: '/auth/sign-in',
+  })(request);
 }
 
 export const config = {

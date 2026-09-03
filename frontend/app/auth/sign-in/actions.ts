@@ -137,7 +137,7 @@ export async function signInWithEmail(
 
     // Attempt to sign in using Neon Auth
     // auth.signIn.email(credentials) - Sign in with email and password
-    const { data, error } = await auth.signIn.email({
+    const { error } = await auth.signIn.email({
       email,
       password,
     });
@@ -245,7 +245,7 @@ export async function signInWithEmailOtp(
       return { error: 'Please enter a valid OTP' };
     }
 
-    const { data, error } = await auth.signIn.emailOtp({
+    const { error } = await auth.signIn.emailOtp({
       email: email.toLowerCase(),
       otp,
     });
