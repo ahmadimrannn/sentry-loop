@@ -39,6 +39,8 @@
   "allowScripts": {
     "@neondatabase/auth@0.5.0-beta": true,
     "@neondatabase/auth-ui@0.3.0-beta": true,
-    "pg@8.23.0": true
+    "pg@8.23.0": true,
+    "lucide-react@0.555.0": true,
+    "lucide-react@1.39.0": true
   }
 }

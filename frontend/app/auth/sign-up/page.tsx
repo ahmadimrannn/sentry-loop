@@ -6,6 +6,8 @@ import { redirect } from "next/navigation";
 import AuthImage from "../../../components/shared/AuthImage"
 
 
+export const dynamic = "force-dynamic";
+
 export default async function SignupPage() {
     const { data: session } = await auth.getSession()
 

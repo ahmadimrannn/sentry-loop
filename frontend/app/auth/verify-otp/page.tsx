@@ -5,11 +5,11 @@ import { authClient } from "@/lib/auth/client";
 import Image from 'next/image';
 import Link from 'next/link'
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect } from "react";
+import { Suspense, useEffect } from "react";
 import AuthImage from "../../../components/shared/AuthImage"
 
 
-export default function VerifyOtpPage() {
+function VerifyOtpContent() {
     const searchParams = useSearchParams();
     const email = searchParams.get('email') || '';
     
@@ -59,5 +59,13 @@ export default function VerifyOtpPage() {
                 </div>
             </div>
         </div>
+    );
+}
+
+export default function VerifyOtpPage() {
+    return (
+        <Suspense fallback={<div className="flex h-screen items-center justify-center">Loading...</div>}>
+            <VerifyOtpContent />
+        </Suspense>
     );
 }
