@@ -1,13 +1,24 @@
 'use client';
 
 import { VerifyOtpForm } from "@/components/verify-otp-form"
+import { authClient } from "@/lib/auth/client";
 import Image from 'next/image';
 import Link from 'next/link'
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect } from "react";
 
 export default function VerifyOtpPage() {
     const searchParams = useSearchParams();
     const email = searchParams.get('email') || '';
+    
+    const { data: session, isPending } = authClient.useSession();
+    const router = useRouter();
+
+    useEffect(() => {
+        if (session) {
+        router.push('/dashboard');
+        }
+    }, [session, isPending, router]);
 
     if (!email) {
         return (
@@ -27,19 +38,21 @@ export default function VerifyOtpPage() {
 
     return (
         <div className="grid min-h-svh lg:grid-cols-2">
-        <div className="flex flex-col gap-2 px-6 md:px-10">
-            <div className="flex justify-center gap-2 md:justify-start">
-            <Link href="/" className="flex items-center py-3 font-medium">
-                <div className="flex items-center justify-center rounded-md">
-                <Image src={"/logo_header.png"} width={40} height={40} alt='Sentry Loop Logo' />
+        <div className="flex flex-col justify-center px-6 md:px-10">
+            <div className="flex flex-col items-center justify-center">
+                <div>
+                    <Link href={"/"}>
+                        <Image 
+                            src={"/logo_header.png"}
+                            alt="Sentry Loop Logo"
+                            width={60}
+                            height={60}
+                        />
+                    </Link>
                 </div>
-                <p className='font-sans'>Sentry Loop</p>
-            </Link>
-            </div>
-            <div className="flex flex-1 items-center justify-center">
-            <div className="w-full max-w-xs">
-                <VerifyOtpForm email={email} />
-            </div>
+                <div className="w-full max-w-xs">
+                    <VerifyOtpForm email={email} />
+                </div>
             </div>
         </div>
         <div className="relative hidden bg-muted lg:block">
