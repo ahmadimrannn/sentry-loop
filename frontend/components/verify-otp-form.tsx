@@ -43,8 +43,8 @@ export function VerifyOtpForm({
     <form className={cn("flex flex-col gap-6", className)} action={formAction} {...props}>
       <FieldGroup>
         <div className="flex flex-col items-center gap-2 text-center">
-          <h1 className="text-2xl font-bold">Verify your email</h1>
-          <p className="text-sm text-balance text-muted-foreground">
+          <h1 className="text-2xl font-sans tracking-tight">Verify your email</h1>
+          <p className="text-sm text-balance font-inter text-muted-foreground">
             Enter the 6-digit code sent to <br />
             <span className="font-medium text-foreground">{email}</span>
           </p>
@@ -63,7 +63,7 @@ export function VerifyOtpForm({
             required
             className="text-center text-2xl tracking-widest"
           />
-          <FieldDescription>
+          <FieldDescription className="font-inter">
             Check your email for the 6-digit code
           </FieldDescription>
         </Field>
@@ -75,18 +75,18 @@ export function VerifyOtpForm({
         )}
 
         {state?.success && (
-          <div className="rounded-md px-3 py-2 text-sm text-green-600">
+          <div className="rounded-md px-3 py-2 font-inter text-sm text-green-600">
             Email verified successfully! Redirecting...
           </div>
         )}
 
         <Field>
-          <Button type="submit" disabled={isPending} className="w-full">
+          <Button type="submit" disabled={isPending} className="w-full py-4">
             {isPending ? "Verifying..." : "Verify Email"}
           </Button>
         </Field>
 
-        <div className="text-center text-sm text-muted-foreground">
+        <div className="text-center font-inter text-sm text-muted-foreground">
           Didn&apos;t receive the code?{" "}
           <form action={resendAction} className="inline">
             <button
@@ -98,14 +98,14 @@ export function VerifyOtpForm({
             </button>
           </form>
           {resendState?.success && (
-            <p className="mt-2 text-green-600 text-xs">OTP sent successfully!</p>
+            <p className="mt-2 text-green-600 text-xs font-inter">OTP sent successfully!</p>
           )}
           {resendState?.error && (
             <p className="mt-2 text-red-500 text-xs">{resendState.error}</p>
           )}
         </div>
 
-        <div className="text-center text-sm">
+        <div className="text-center font-inter text-sm">
           <a href="/auth/sign-in" className="text-primary underline underline-offset-4 hover:text-primary/80">
             Back to sign in
           </a>
