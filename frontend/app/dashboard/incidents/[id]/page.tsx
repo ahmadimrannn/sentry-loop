@@ -161,7 +161,7 @@ export default async function IncidentDetailPage({ params }: IncidentDetailPageP
                 <FileCode2 className="size-4 text-neutral-500" />
                 Proposed Change
                 </h2>
-                <div className="rounded-lg border border-border bg-card p-4 text-xs leading-relaxed text-foreground whitespace-pre-wrap bg-neutral-50/50 dark:bg-neutral-900/40 font-mono">
+                <div className="rounded-lg border border-border bg-card p-4 text-xs leading-relaxed text-foreground whitespace-pre-wrap dark:bg-neutral-900/40 font-mono">
                 {incident.proposed_change}
                 </div>
             </div>

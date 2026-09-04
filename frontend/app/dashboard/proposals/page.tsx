@@ -44,11 +44,11 @@ export default async function ProposalsPage({ searchParams }: ProposalsPageProps
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead className="w-[30px] pr-0 font-inter"></TableHead>
-                <TableHead className="w-[140px] font-inter">Status</TableHead>
-                <TableHead className="w-[180px] font-inter">Thread ID</TableHead>
-                <TableHead className="w-[200px] font-inter">Linked Incident</TableHead>
-                <TableHead className="text-right w-[140px] font-inter">Created At</TableHead>
+                <TableHead className="w-7.5 pr-0 font-inter"></TableHead>
+                <TableHead className="w-35 font-inter">Status</TableHead>
+                <TableHead className="w-45 font-inter">Thread ID</TableHead>
+                <TableHead className="w-50 font-inter">Linked Incident</TableHead>
+                <TableHead className="text-right w-35 font-inter">Created At</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
