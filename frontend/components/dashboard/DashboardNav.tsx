@@ -21,11 +21,12 @@ import signOut from "@/app/auth/sign-out/actions";
 
 interface DashboardNavProps {
   userEmail?: string | null;
+  userName?: string | null;
   userImage?: string | null;
   children: React.ReactNode;
 }
 
-export function DashboardShell({ userEmail, userImage, children }: DashboardNavProps) {
+export function DashboardShell({ userEmail, userName, userImage, children }: DashboardNavProps) {
   const pathname = usePathname();
 
   const navItems = [
@@ -102,21 +103,30 @@ export function DashboardShell({ userEmail, userImage, children }: DashboardNavP
           </SidebarMenu>
         </SidebarContent>
 
-        {/* Footer User Avatar, User Email & Sign Out */}
+        {/* Footer User Avatar, User Name, User Email & Sign Out */}
         <SidebarFooter className="p-4 border-t border-sidebar-border space-y-3">
-          {userImage && (
-            <div className="px-1">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={userImage}
-                alt="User Avatar"
-                className="size-9 rounded-full object-cover border border-sidebar-border shadow-2xs"
-              />
-            </div>
-          )}
-          {userEmail && (
-            <div className="text-xs text-sidebar-foreground/70 truncate px-1 font-mono">
-              {userEmail}
+          {(userImage || userName || userEmail) && (
+            <div className="flex items-center gap-2.5 px-1 overflow-hidden">
+              {userImage && (
+                /* eslint-disable-next-line @next/next/no-img-element */
+                <img
+                  src={userImage}
+                  alt={userName || "User Avatar"}
+                  className="size-8 rounded-full object-cover border border-sidebar-border shrink-0"
+                />
+              )}
+              <div className="flex flex-col min-w-0">
+                {userName && (
+                  <span className="font-geist text-xs font-semibold tracking-tight text-sidebar-foreground truncate capitalize">
+                    {userName}
+                  </span>
+                )}
+                {userEmail && (
+                  <span className="text-[11px] text-sidebar-foreground/70 truncate font-mono">
+                    {userEmail}
+                  </span>
+                )}
+              </div>
             </div>
           )}
           <Button
@@ -134,18 +144,25 @@ export function DashboardShell({ userEmail, userImage, children }: DashboardNavP
       {/* Main Content Inset */}
       <SidebarInset className="flex flex-col min-w-0 flex-1 bg-background">
         {/* Top bar trigger for mobile viewports */}
-        <header className="flex h-12 items-center gap-2.5 border-b border-border px-4 md:hidden">
-          <SidebarTrigger />
-          <Link href="/dashboard" className="flex items-center gap-2">
-            <Image
-              src="/logo_header.png"
-              alt="SentryLoop Logo"
-              width={20}
-              height={20}
-              className="size-5 object-contain"
-            />
-            <span className="font-geist font-semibold text-sm tracking-tight">SentryLoop</span>
-          </Link>
+        <header className="flex h-12 items-center justify-between border-b border-border px-4 md:hidden">
+          <div className="flex items-center gap-2.5">
+            <SidebarTrigger />
+            <Link href="/dashboard" className="flex items-center gap-2">
+              <Image
+                src="/logo_header.png"
+                alt="SentryLoop Logo"
+                width={20}
+                height={20}
+                className="size-5 object-contain"
+              />
+              <span className="font-geist font-semibold text-sm tracking-tight">SentryLoop</span>
+            </Link>
+          </div>
+          {(userName || userEmail) && (
+            <div className="text-xs text-muted-foreground truncate max-w-[120px] font-mono">
+              {userName || userEmail}
+            </div>
+          )}
         </header>
 
         <main className="flex-1 p-4 md:p-6 min-w-0 font-inter">{children}</main>

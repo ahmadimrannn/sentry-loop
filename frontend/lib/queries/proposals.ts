@@ -55,5 +55,20 @@ export async function getProposals(
     ORDER BY p.created_at ${sortDir}
   `;
 
-  return await query<ProposalRow>(sql, params);
+  const rows = await query<Record<string, unknown>>(sql, params);
+
+  return rows.map((r) => ({
+    id: String(r.id),
+    created_at: r.created_at ? new Date(r.created_at as string | Date).toISOString() : '',
+    investigation_summary: String(r.investigation_summary ?? ''),
+    evidence: r.evidence,
+    proposed_change: String(r.proposed_change ?? ''),
+    status: (r.status as 'pending_approval' | 'approved' | 'rejected') ?? 'pending_approval',
+    thread_id: r.thread_id ? String(r.thread_id) : null,
+    last_emailed_at: r.last_emailed_at ? new Date(r.last_emailed_at as string | Date).toISOString() : '',
+    reminder_count: Number(r.reminder_count ?? 0),
+    incident_id: r.incident_id != null ? Number(r.incident_id) : null,
+    incident_service: r.incident_service ? String(r.incident_service) : null,
+    incident_route: r.incident_route ? String(r.incident_route) : null,
+  }));
 }

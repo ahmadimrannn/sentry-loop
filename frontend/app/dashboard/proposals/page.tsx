@@ -11,21 +11,6 @@ interface ProposalsPageProps {
   }>;
 }
 
-function formatDate(dateStr: string) {
-  try {
-    const d = new Date(dateStr);
-    return new Intl.DateTimeFormat("en-US", {
-      month: "short",
-      day: "numeric",
-      hour: "numeric",
-      minute: "2-digit",
-      hour12: true,
-    }).format(d);
-  } catch {
-    return dateStr;
-  }
-}
-
 export default async function ProposalsPage({ searchParams }: ProposalsPageProps) {
   const params = await searchParams;
   const statusFilter = params.status || "all";
@@ -71,7 +56,6 @@ export default async function ProposalsPage({ searchParams }: ProposalsPageProps
                 <ProposalRowItem
                   key={proposal.id}
                   proposal={proposal}
-                  formatDate={formatDate}
                 />
               ))}
             </TableBody>

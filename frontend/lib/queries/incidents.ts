@@ -75,7 +75,21 @@ export async function getIncidents(
     ORDER BY ${sortColumn} ${sortDir}
   `;
 
-  return await query<Incident>(sql, params);
+  const rows = await query<Record<string, unknown>>(sql, params);
+
+  return rows.map((r) => ({
+    id: Number(r.id),
+    thread_id: String(r.thread_id),
+    service: String(r.service),
+    route: r.route ? String(r.route) : null,
+    severity: String(r.severity),
+    investigation_summary: String(r.investigation_summary ?? ''),
+    proposed_change: r.proposed_change ? String(r.proposed_change) : null,
+    reached_via: r.reached_via as Incident['reached_via'],
+    final_status: r.final_status as Incident['final_status'],
+    embedded_text: String(r.embedded_text ?? ''),
+    created_at: r.created_at ? new Date(r.created_at as string | Date).toISOString() : '',
+  }));
 }
 
 export async function getIncidentServices(): Promise<string[]> {
@@ -88,7 +102,7 @@ export async function getIncidentServices(): Promise<string[]> {
 export async function getIncidentById(
   id: number
 ): Promise<IncidentWithLinkedProposal | null> {
-  const incidents = await query<Incident>(
+  const incidents = await query<Record<string, unknown>>(
     `SELECT id, thread_id, service, route, severity, investigation_summary, proposed_change, reached_via, final_status, embedded_text, created_at FROM incidents WHERE id = $1`,
     [id]
   );
@@ -97,7 +111,20 @@ export async function getIncidentById(
     return null;
   }
 
-  const incident = incidents[0];
+  const r = incidents[0];
+  const incident: Incident = {
+    id: Number(r.id),
+    thread_id: String(r.thread_id),
+    service: String(r.service),
+    route: r.route ? String(r.route) : null,
+    severity: String(r.severity),
+    investigation_summary: String(r.investigation_summary ?? ''),
+    proposed_change: r.proposed_change ? String(r.proposed_change) : null,
+    reached_via: r.reached_via as Incident['reached_via'],
+    final_status: r.final_status as Incident['final_status'],
+    embedded_text: String(r.embedded_text ?? ''),
+    created_at: r.created_at ? new Date(r.created_at as string | Date).toISOString() : '',
+  };
 
   if (incident.thread_id) {
     const proposals = await query<LinkedProposalInfo>(

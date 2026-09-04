@@ -9,10 +9,24 @@ import type { ProposalRow } from "@/lib/queries/proposals";
 
 interface ProposalRowItemProps {
   proposal: ProposalRow;
-  formatDate: (d: string) => string;
 }
 
-export function ProposalRowItem({ proposal, formatDate }: ProposalRowItemProps) {
+function formatDate(dateStr: string | Date) {
+  try {
+    const d = typeof dateStr === "string" ? new Date(dateStr) : dateStr;
+    return new Intl.DateTimeFormat("en-US", {
+      month: "short",
+      day: "numeric",
+      hour: "numeric",
+      minute: "2-digit",
+      hour12: true,
+    }).format(d);
+  } catch {
+    return String(dateStr);
+  }
+}
+
+export function ProposalRowItem({ proposal }: ProposalRowItemProps) {
   const [expanded, setExpanded] = useState(false);
 
   return (
