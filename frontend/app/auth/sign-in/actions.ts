@@ -196,7 +196,7 @@ export async function signInWithSocial(provider: 'google' | 'github'): Promise<n
   try {
     const { data, error } = await auth.signIn.social({
       provider,
-      callbackURL: `${process.env.NEXT_PUBLIC_APP_URL || 'https://sentryloop.vercel.app'}/auth/callback`,
+      callbackURL: `${process.env.NEXT_PUBLIC_APP_URL || 'https://sentryloop.vercel.app'}/dashboard`,
     });
 
     if (error || !data) {
