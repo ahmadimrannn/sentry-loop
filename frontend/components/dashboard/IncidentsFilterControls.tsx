@@ -48,12 +48,12 @@ export function IncidentsFilterControls({
   return (
     <div className="flex flex-wrap items-center gap-3">
       <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-        <span className="font-medium text-foreground">Service:</span>
+        <span className="font-medium text-md text-foreground">Service:</span>
         <Select value={currentService} onValueChange={handleServiceChange}>
           <SelectTrigger className="w-36 h-8 text-xs">
             <SelectValue placeholder="All Services" />
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent className={"px-2 py-2"}>
             <SelectItem value="all">All Services</SelectItem>
             {services.map((svc) => (
               <SelectItem key={svc} value={svc}>
@@ -70,7 +70,7 @@ export function IncidentsFilterControls({
           <SelectTrigger className="w-36 h-8 text-xs">
             <SelectValue placeholder="All Statuses" />
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent className={"px-2 py-2"}>
             <SelectItem value="all">All Statuses</SelectItem>
             <SelectItem value="approved">Approved</SelectItem>
             <SelectItem value="rejected">Rejected</SelectItem>

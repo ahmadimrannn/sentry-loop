@@ -61,22 +61,22 @@ export function DashboardShell({ userEmail, userName, userImage, children }: Das
         {/* Header Wordmark & Logo */}
         <SidebarHeader className="p-4 border-b border-sidebar-border">
           <Link
-            href="/dashboard"
-            className="flex items-center gap-2.5 font-geist font-semibold text-base tracking-tight text-sidebar-foreground"
+            href="/"
+            className="flex items-center font-geist text-base tracking-tight text-sidebar-foreground"
           >
             <Image
               src="/logo_header.png"
               alt="SentryLoop Logo"
-              width={24}
-              height={24}
-              className="size-6 object-contain"
+              width={30}
+              height={30}
+              className="object-contain"
             />
             <span>SentryLoop</span>
           </Link>
         </SidebarHeader>
 
         {/* Navigation Items */}
-        <SidebarContent className="p-2">
+        <SidebarContent className="p-2 py-6">
           <SidebarMenu>
             {navItems.map((item) => {
               const Icon = item.icon;
@@ -85,16 +85,16 @@ export function DashboardShell({ userEmail, userName, userImage, children }: Das
                 <SidebarMenuItem key={item.href}>
                   <SidebarMenuButton
                     render={
-                      <Link href={item.href} className="flex items-center gap-2.5 font-inter">
-                        <Icon className="size-4 shrink-0" />
+                      <Link href={item.href} className="flex items-center gap-2.5 font-inter text-[18px] py-6 mb-2">
+                        <Icon className="size-6 shrink-0" />
                         <span>{item.name}</span>
                       </Link>
                     }
                     isActive={active}
                     className={
                       active
-                        ? "bg-sidebar-primary text-sidebar-primary-foreground font-semibold font-inter"
-                        : "text-sidebar-foreground/70 hover:text-sidebar-foreground font-inter"
+                        ? "bg-sidebar-primary text-sidebar-primary-foreground font-semibold font-geist"
+                        : "text-sidebar-foreground/70 hover:text-sidebar-foreground font-geist"
                     }
                   />
                 </SidebarMenuItem>
@@ -106,18 +106,18 @@ export function DashboardShell({ userEmail, userName, userImage, children }: Das
         {/* Footer User Avatar, User Name, User Email & Sign Out */}
         <SidebarFooter className="p-4 border-t border-sidebar-border space-y-3">
           {(userImage || userName || userEmail) && (
-            <div className="flex items-center gap-2.5 px-1 overflow-hidden">
+            <div className="flex items-center gap-1.5 px-1 overflow-hidden">
               {userImage && (
                 /* eslint-disable-next-line @next/next/no-img-element */
                 <img
                   src={userImage}
                   alt={userName || "User Avatar"}
-                  className="size-8 rounded-full object-cover border border-sidebar-border shrink-0"
+                  className="size-11 rounded-full object-cover border border-sidebar-border shrink-0"
                 />
               )}
               <div className="flex flex-col min-w-0">
                 {userName && (
-                  <span className="font-geist text-xs font-semibold tracking-tight text-sidebar-foreground truncate capitalize">
+                  <span className="font-geist text-sm font-semibold tracking-tight text-sidebar-foreground truncate capitalize">
                     {userName}
                   </span>
                 )}
@@ -130,12 +130,12 @@ export function DashboardShell({ userEmail, userName, userImage, children }: Das
             </div>
           )}
           <Button
-            variant="ghost"
-            size="xs"
-            className="w-full justify-start gap-2 text-xs text-sidebar-foreground/70 hover:text-sidebar-foreground hover:bg-sidebar-accent font-inter"
+            variant="destructive"
+            size="sm"
+            className="justify-start px-4 py-5 text-md text-sidebar-foreground/70 hover:text-sidebar hover:bg-red-400 cursor-pointer font-inter"
             onClick={handleSignOut}
           >
-            <LogOut className="size-3.5" />
+            <LogOut className="size-4" />
             Sign Out
           </Button>
         </SidebarFooter>
@@ -159,7 +159,7 @@ export function DashboardShell({ userEmail, userName, userImage, children }: Das
             </Link>
           </div>
           {(userName || userEmail) && (
-            <div className="text-xs text-muted-foreground truncate max-w-[120px] font-mono">
+            <div className="text-xs text-muted-foreground truncate max-w-30 font-mono">
               {userName || userEmail}
             </div>
           )}

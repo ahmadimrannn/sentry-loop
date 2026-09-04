@@ -24,10 +24,10 @@ export default async function ProposalsPage({ searchParams }: ProposalsPageProps
       {/* Page Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-border">
         <div>
-          <h1 className="font-geist text-xl font-semibold tracking-tight text-foreground">
+          <h1 className="font-geist text-3xl tracking-tighter text-foreground">
             Proposals
           </h1>
-          <p className="text-xs text-muted-foreground mt-0.5 font-inter">
+          <p className="text-md text-muted-foreground mt-0.5 font-inter">
             Proposals are approved or rejected from the email sent when they&apos;re created.
           </p>
         </div>

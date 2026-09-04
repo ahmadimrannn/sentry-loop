@@ -65,10 +65,10 @@ export default async function IncidentsPage({ searchParams }: PageProps) {
       {/* Page Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-border">
         <div>
-          <h1 className="font-geist text-xl font-semibold tracking-tight text-foreground">
+          <h1 className="font-geist text-3xl tracking-tighter text-foreground">
             Incidents
           </h1>
-          <p className="text-xs text-muted-foreground mt-0.5 font-inter">
+          <p className="text-md text-muted-foreground mt-0.5 font-inter">
             Real incident investigations captured from production environments.
           </p>
         </div>
@@ -89,12 +89,12 @@ export default async function IncidentsPage({ searchParams }: PageProps) {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead className="w-[120px] font-inter">Service</TableHead>
-                <TableHead className="w-[100px] font-inter">Severity</TableHead>
-                <TableHead className="w-[180px] font-inter">Route</TableHead>
-                <TableHead className="w-[160px] font-inter">Reached Via</TableHead>
-                <TableHead className="w-[100px] font-inter">Status</TableHead>
-                <TableHead className="text-right w-[140px] font-inter">Created At</TableHead>
+                <TableHead className="w-30 font-inter">Service</TableHead>
+                <TableHead className="w-25 font-inter">Severity</TableHead>
+                <TableHead className="w-45 font-inter">Route</TableHead>
+                <TableHead className="w-40 font-inter">Reached Via</TableHead>
+                <TableHead className="w-25 font-inter">Status</TableHead>
+                <TableHead className="text-right w-35 font-inter">Created At</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -126,7 +126,7 @@ export default async function IncidentsPage({ searchParams }: PageProps) {
                       </Badge>
                     </Link>
                   </TableCell>
-                  <TableCell className="font-mono text-xs text-muted-foreground truncate max-w-[200px]">
+                  <TableCell className="font-mono text-xs text-muted-foreground truncate max-w-50">
                     <Link href={`/dashboard/incidents/${incident.id}`} className="block w-full truncate">
                       {incident.route || "—"}
                     </Link>
