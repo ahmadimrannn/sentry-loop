@@ -10,12 +10,16 @@ export default async function DashboardLayout({
   children: React.ReactNode;
 }) {
   const { data: session } = await auth.getSession();
-  const userEmail = session?.user?.email ?? null;
+  const user = session?.user;
+  const userEmail = user?.email ?? null;
+  const userImage = (user as { image?: string; avatar?: string; picture?: string })?.image ||
+    (user as { image?: string; avatar?: string; picture?: string })?.avatar ||
+    (user as { image?: string; avatar?: string; picture?: string })?.picture || null;
 
   return (
-    <div className="min-h-screen flex flex-col bg-background">
+    <div className="min-h-screen flex flex-col bg-background font-inter">
       <DisclosureBanner />
-      <DashboardShell userEmail={userEmail}>
+      <DashboardShell userEmail={userEmail} userImage={userImage}>
         {children}
       </DashboardShell>
     </div>

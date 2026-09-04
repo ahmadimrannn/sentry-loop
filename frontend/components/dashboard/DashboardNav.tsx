@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { ShieldAlert, FileText, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -20,10 +21,11 @@ import signOut from "@/app/auth/sign-out/actions";
 
 interface DashboardNavProps {
   userEmail?: string | null;
+  userImage?: string | null;
   children: React.ReactNode;
 }
 
-export function DashboardShell({ userEmail, children }: DashboardNavProps) {
+export function DashboardShell({ userEmail, userImage, children }: DashboardNavProps) {
   const pathname = usePathname();
 
   const navItems = [
@@ -55,13 +57,20 @@ export function DashboardShell({ userEmail, children }: DashboardNavProps) {
   return (
     <SidebarProvider defaultOpen>
       <Sidebar>
-        {/* Header Wordmark */}
+        {/* Header Wordmark & Logo */}
         <SidebarHeader className="p-4 border-b border-sidebar-border">
           <Link
             href="/dashboard"
-            className="font-geist font-semibold text-base tracking-tight text-sidebar-foreground"
+            className="flex items-center gap-2.5 font-geist font-semibold text-base tracking-tight text-sidebar-foreground"
           >
-            SentryLoop
+            <Image
+              src="/logo_header.png"
+              alt="SentryLoop Logo"
+              width={24}
+              height={24}
+              className="size-6 object-contain"
+            />
+            <span>SentryLoop</span>
           </Link>
         </SidebarHeader>
 
@@ -93,8 +102,18 @@ export function DashboardShell({ userEmail, children }: DashboardNavProps) {
           </SidebarMenu>
         </SidebarContent>
 
-        {/* Footer User Info & Sign Out */}
-        <SidebarFooter className="p-4 border-t border-sidebar-border space-y-2">
+        {/* Footer User Avatar, User Email & Sign Out */}
+        <SidebarFooter className="p-4 border-t border-sidebar-border space-y-3">
+          {userImage && (
+            <div className="px-1">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={userImage}
+                alt="User Avatar"
+                className="size-9 rounded-full object-cover border border-sidebar-border shadow-2xs"
+              />
+            </div>
+          )}
           {userEmail && (
             <div className="text-xs text-sidebar-foreground/70 truncate px-1 font-mono">
               {userEmail}
@@ -115,9 +134,18 @@ export function DashboardShell({ userEmail, children }: DashboardNavProps) {
       {/* Main Content Inset */}
       <SidebarInset className="flex flex-col min-w-0 flex-1 bg-background">
         {/* Top bar trigger for mobile viewports */}
-        <header className="flex h-12 items-center gap-2 border-b border-border px-4 md:hidden">
+        <header className="flex h-12 items-center gap-2.5 border-b border-border px-4 md:hidden">
           <SidebarTrigger />
-          <span className="font-geist font-semibold text-sm tracking-tight">SentryLoop</span>
+          <Link href="/dashboard" className="flex items-center gap-2">
+            <Image
+              src="/logo_header.png"
+              alt="SentryLoop Logo"
+              width={20}
+              height={20}
+              className="size-5 object-contain"
+            />
+            <span className="font-geist font-semibold text-sm tracking-tight">SentryLoop</span>
+          </Link>
         </header>
 
         <main className="flex-1 p-4 md:p-6 min-w-0 font-inter">{children}</main>

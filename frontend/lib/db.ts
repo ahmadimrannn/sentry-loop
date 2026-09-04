@@ -37,7 +37,6 @@ function sleep(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-// This is the function you call instead of pool.query() directly.
 export async function query<T extends QueryResultRow = QueryResultRow>(
   text: string,
   params?: unknown[]
@@ -45,13 +44,16 @@ export async function query<T extends QueryResultRow = QueryResultRow>(
   let lastError: unknown;
 
   for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
-    const client = await pool.connect();
+    let client: PoolClient | null = null;
+    let clientReleased = false;
 
     try {
+      client = await pool.connect();
       const isAlive = await checkConnection(client);
 
       if (!isAlive) {
         client.release(true);
+        clientReleased = true;
 
         if (attempt === MAX_RETRIES) {
           throw new Error(
@@ -63,13 +65,18 @@ export async function query<T extends QueryResultRow = QueryResultRow>(
           `Connection check failed (attempt ${attempt}/${MAX_RETRIES}), retrying in ${RETRY_DELAY_MS * attempt}ms — likely Neon waking up from sleep.`
         );
         await sleep(RETRY_DELAY_MS * attempt);
-        continue; 
+        continue;
       }
 
       const result = await client.query<T>(text, params);
       return result.rows;
     } catch (error) {
       lastError = error;
+
+      if (client && !clientReleased) {
+        client.release(true);
+        clientReleased = true;
+      }
 
       if (attempt === MAX_RETRIES) {
         throw error;
@@ -81,7 +88,7 @@ export async function query<T extends QueryResultRow = QueryResultRow>(
       );
       await sleep(RETRY_DELAY_MS * attempt);
     } finally {
-      if (client.listenerCount('error') > 0) {
+      if (client && !clientReleased) {
         client.release();
       }
     }
