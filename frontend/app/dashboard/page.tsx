@@ -61,14 +61,14 @@ export default async function IncidentsPage({ searchParams }: PageProps) {
   ]);
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 font-inter">
       {/* Page Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-border">
         <div>
-          <h1 className="font-heading text-xl font-bold tracking-tight text-foreground">
+          <h1 className="font-geist text-xl font-semibold tracking-tight text-foreground">
             Incidents
           </h1>
-          <p className="text-xs text-muted-foreground mt-0.5 font-sans">
+          <p className="text-xs text-muted-foreground mt-0.5 font-inter">
             Real incident investigations captured from production environments.
           </p>
         </div>
@@ -81,7 +81,7 @@ export default async function IncidentsPage({ searchParams }: PageProps) {
 
       {/* Incidents Table */}
       {incidents.length === 0 ? (
-        <div className="py-12 text-center text-sm text-muted-foreground">
+        <div className="py-12 text-center text-sm text-muted-foreground font-inter">
           No incidents recorded yet.
         </div>
       ) : (
@@ -89,12 +89,12 @@ export default async function IncidentsPage({ searchParams }: PageProps) {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead className="w-[120px]">Service</TableHead>
-                <TableHead className="w-[100px]">Severity</TableHead>
-                <TableHead className="w-[180px]">Route</TableHead>
-                <TableHead className="w-[160px]">Reached Via</TableHead>
-                <TableHead className="w-[100px]">Status</TableHead>
-                <TableHead className="text-right w-[140px]">Created At</TableHead>
+                <TableHead className="w-[120px] font-inter">Service</TableHead>
+                <TableHead className="w-[100px] font-inter">Severity</TableHead>
+                <TableHead className="w-[180px] font-inter">Route</TableHead>
+                <TableHead className="w-[160px] font-inter">Reached Via</TableHead>
+                <TableHead className="w-[100px] font-inter">Status</TableHead>
+                <TableHead className="text-right w-[140px] font-inter">Created At</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -131,7 +131,7 @@ export default async function IncidentsPage({ searchParams }: PageProps) {
                       {incident.route || "—"}
                     </Link>
                   </TableCell>
-                  <TableCell className="text-xs text-muted-foreground">
+                  <TableCell className="text-xs text-muted-foreground font-inter">
                     <Link href={`/dashboard/incidents/${incident.id}`} className="block w-full">
                       {formatReachedVia(incident.reached_via)}
                     </Link>

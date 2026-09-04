@@ -133,15 +133,18 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-inter;
   }
   html {
-    @apply font-sans;
+    @apply font-inter;
     scroll-behavior: smooth;
   }
 }
 
 @layer utilities {
+  .font-geist {
+    font-family: var(--font-sans);
+  }
   .font-inter {
     font-family: var(--font-inter);
   }

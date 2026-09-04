@@ -1,7 +1,13 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
-import { Select } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 interface ProposalsFilterControlsProps {
   currentStatus?: string;
@@ -13,9 +19,9 @@ export function ProposalsFilterControls({
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const handleStatusChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleStatusChange = (val: string | null) => {
+    if (!val) return;
     const params = new URLSearchParams(searchParams.toString());
-    const val = e.target.value;
     if (val === "all") {
       params.delete("status");
     } else {
@@ -26,19 +32,17 @@ export function ProposalsFilterControls({
 
   return (
     <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-      <label htmlFor="proposal-status-filter" className="font-medium text-foreground">
-        Status:
-      </label>
-      <Select
-        id="proposal-status-filter"
-        value={currentStatus}
-        onChange={handleStatusChange}
-        className="w-36"
-      >
-        <option value="all">All Statuses</option>
-        <option value="pending_approval">Pending Approval</option>
-        <option value="approved">Approved</option>
-        <option value="rejected">Rejected</option>
+      <span className="font-medium text-foreground">Status:</span>
+      <Select value={currentStatus} onValueChange={handleStatusChange}>
+        <SelectTrigger className="w-36 h-8 text-xs">
+          <SelectValue placeholder="All Statuses" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value="all">All Statuses</SelectItem>
+          <SelectItem value="pending_approval">Pending Approval</SelectItem>
+          <SelectItem value="approved">Approved</SelectItem>
+          <SelectItem value="rejected">Rejected</SelectItem>
+        </SelectContent>
       </Select>
     </div>
   );

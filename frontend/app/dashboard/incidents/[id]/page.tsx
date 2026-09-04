@@ -53,12 +53,12 @@ export default async function IncidentDetailPage({ params }: IncidentDetailPageP
   }
 
   return (
-    <div className="space-y-6 max-w-5xl">
+    <div className="space-y-6 max-w-5xl font-inter">
       {/* Back Link */}
       <div>
         <Link
           href="/dashboard"
-          className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors font-medium"
+          className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors font-medium font-inter"
         >
           <ArrowLeft className="size-3.5" />
           Back to Incidents
@@ -69,7 +69,7 @@ export default async function IncidentDetailPage({ params }: IncidentDetailPageP
       <div className="rounded-lg border border-border bg-card p-4 space-y-4">
         <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-border">
           <div className="flex items-center gap-2">
-            <h1 className="font-heading text-lg font-bold tracking-tight text-foreground">
+            <h1 className="font-geist text-lg font-semibold tracking-tight text-foreground">
               Incident #{incident.id}
             </h1>
             <Badge
@@ -88,7 +88,7 @@ export default async function IncidentDetailPage({ params }: IncidentDetailPageP
         </div>
 
         {/* Label / Value Grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs font-inter">
           <div>
             <div className="text-muted-foreground font-medium mb-0.5">Service</div>
             <div className="font-mono font-semibold text-foreground">{incident.service}</div>
@@ -126,13 +126,13 @@ export default async function IncidentDetailPage({ params }: IncidentDetailPageP
           <CardHeader className="py-3 px-4 flex flex-row items-center justify-between">
             <div className="flex items-center gap-2">
               <FileCode2 className="size-4 text-amber-600 dark:text-amber-400" />
-              <CardTitle className="text-xs font-semibold text-amber-900 dark:text-amber-200">
+              <CardTitle className="font-geist text-xs font-semibold tracking-tight text-amber-900 dark:text-amber-200">
                 Linked Proposal Available ({incident.linked_proposal.status})
               </CardTitle>
             </div>
             <Link
               href="/dashboard/proposals"
-              className="inline-flex items-center gap-1 text-xs text-amber-700 dark:text-amber-300 hover:underline font-medium"
+              className="inline-flex items-center gap-1 text-xs text-amber-700 dark:text-amber-300 hover:underline font-medium font-inter"
             >
               View on Proposals page
               <ExternalLink className="size-3" />
@@ -142,10 +142,10 @@ export default async function IncidentDetailPage({ params }: IncidentDetailPageP
       )}
 
       {/* Free-text Prose Blocks */}
-      <div className="space-y-6">
+      <div className="space-y-6 font-inter">
         {/* Investigation Summary */}
         <div className="space-y-2">
-          <h2 className="text-sm font-semibold text-foreground flex items-center gap-2">
+          <h2 className="font-geist text-sm font-semibold tracking-tight text-foreground flex items-center gap-2">
             <ShieldAlert className="size-4 text-neutral-500" />
             Investigation Summary
           </h2>
@@ -157,11 +157,11 @@ export default async function IncidentDetailPage({ params }: IncidentDetailPageP
         {/* Proposed Change */}
         {incident.proposed_change && (
           <div className="space-y-2">
-            <h2 className="text-sm font-semibold text-foreground flex items-center gap-2">
+            <h2 className="font-geist text-sm font-semibold tracking-tight text-foreground flex items-center gap-2">
               <FileCode2 className="size-4 text-neutral-500" />
               Proposed Change
             </h2>
-            <div className="rounded-lg border border-border bg-card p-4 text-xs leading-relaxed text-foreground font-inter whitespace-pre-wrap bg-neutral-50/50 dark:bg-neutral-900/40 font-mono">
+            <div className="rounded-lg border border-border bg-card p-4 text-xs leading-relaxed text-foreground whitespace-pre-wrap bg-neutral-50/50 dark:bg-neutral-900/40 font-mono">
               {incident.proposed_change}
             </div>
           </div>

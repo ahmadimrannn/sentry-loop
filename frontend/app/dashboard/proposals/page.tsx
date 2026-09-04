@@ -35,14 +35,14 @@ export default async function ProposalsPage({ searchParams }: ProposalsPageProps
   });
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 font-inter">
       {/* Page Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-border">
         <div>
-          <h1 className="font-heading text-xl font-bold tracking-tight text-foreground">
+          <h1 className="font-geist text-xl font-semibold tracking-tight text-foreground">
             Proposals
           </h1>
-          <p className="text-xs text-muted-foreground mt-0.5 font-sans">
+          <p className="text-xs text-muted-foreground mt-0.5 font-inter">
             Proposals are approved or rejected from the email sent when they&apos;re created.
           </p>
         </div>
@@ -51,7 +51,7 @@ export default async function ProposalsPage({ searchParams }: ProposalsPageProps
 
       {/* Proposals Table */}
       {proposals.length === 0 ? (
-        <div className="py-12 text-center text-sm text-muted-foreground">
+        <div className="py-12 text-center text-sm text-muted-foreground font-inter">
           No proposals recorded yet.
         </div>
       ) : (
@@ -59,11 +59,11 @@ export default async function ProposalsPage({ searchParams }: ProposalsPageProps
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead className="w-[30px] pr-0"></TableHead>
-                <TableHead className="w-[140px]">Status</TableHead>
-                <TableHead className="w-[180px]">Thread ID</TableHead>
-                <TableHead className="w-[200px]">Linked Incident</TableHead>
-                <TableHead className="text-right w-[140px]">Created At</TableHead>
+                <TableHead className="w-[30px] pr-0 font-inter"></TableHead>
+                <TableHead className="w-[140px] font-inter">Status</TableHead>
+                <TableHead className="w-[180px] font-inter">Thread ID</TableHead>
+                <TableHead className="w-[200px] font-inter">Linked Incident</TableHead>
+                <TableHead className="text-right w-[140px] font-inter">Created At</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>

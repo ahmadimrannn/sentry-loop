@@ -1,7 +1,13 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
-import { Select } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 interface IncidentsFilterControlsProps {
   services: string[];
@@ -17,9 +23,9 @@ export function IncidentsFilterControls({
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const handleServiceChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleServiceChange = (val: string | null) => {
+    if (!val) return;
     const params = new URLSearchParams(searchParams.toString());
-    const val = e.target.value;
     if (val === "all") {
       params.delete("service");
     } else {
@@ -28,9 +34,9 @@ export function IncidentsFilterControls({
     router.push(`/dashboard?${params.toString()}`);
   };
 
-  const handleStatusChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleStatusChange = (val: string | null) => {
+    if (!val) return;
     const params = new URLSearchParams(searchParams.toString());
-    const val = e.target.value;
     if (val === "all") {
       params.delete("status");
     } else {
@@ -42,37 +48,33 @@ export function IncidentsFilterControls({
   return (
     <div className="flex flex-wrap items-center gap-3">
       <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-        <label htmlFor="service-filter" className="font-medium text-foreground">
-          Service:
-        </label>
-        <Select
-          id="service-filter"
-          value={currentService}
-          onChange={handleServiceChange}
-          className="w-36"
-        >
-          <option value="all">All Services</option>
-          {services.map((svc) => (
-            <option key={svc} value={svc}>
-              {svc}
-            </option>
-          ))}
+        <span className="font-medium text-foreground">Service:</span>
+        <Select value={currentService} onValueChange={handleServiceChange}>
+          <SelectTrigger className="w-36 h-8 text-xs">
+            <SelectValue placeholder="All Services" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All Services</SelectItem>
+            {services.map((svc) => (
+              <SelectItem key={svc} value={svc}>
+                {svc}
+              </SelectItem>
+            ))}
+          </SelectContent>
         </Select>
       </div>
 
       <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-        <label htmlFor="status-filter" className="font-medium text-foreground">
-          Status:
-        </label>
-        <Select
-          id="status-filter"
-          value={currentStatus}
-          onChange={handleStatusChange}
-          className="w-36"
-        >
-          <option value="all">All Statuses</option>
-          <option value="approved">Approved</option>
-          <option value="rejected">Rejected</option>
+        <span className="font-medium text-foreground">Status:</span>
+        <Select value={currentStatus} onValueChange={handleStatusChange}>
+          <SelectTrigger className="w-36 h-8 text-xs">
+            <SelectValue placeholder="All Statuses" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All Statuses</SelectItem>
+            <SelectItem value="approved">Approved</SelectItem>
+            <SelectItem value="rejected">Rejected</SelectItem>
+          </SelectContent>
         </Select>
       </div>
     </div>
