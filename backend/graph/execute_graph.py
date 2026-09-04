@@ -115,8 +115,8 @@ if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)
 
     thread_id = str(uuid.uuid4())
-    result = run_investigation(
-        service="lumen", incident_text="Researcher node crashes with KeyError: 'results' when calling the Tavily search tool during a query.",
+    result = run_investigation_to_completion(
+        service="cognilead", incident_text="Cognilead CRM is failing, users are complaining, not sure what changed",
         thread_id=thread_id
     )
 
