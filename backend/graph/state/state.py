@@ -33,3 +33,4 @@ class InvestigationState(TypedDict):
     proposal_id: str
 
     route: str
+    is_demo: bool

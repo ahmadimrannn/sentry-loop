@@ -5,6 +5,9 @@ from api.event_logger import log_event
 
 
 def finalize_node(state: InvestigationState, config: RunnableConfig) -> dict:
+    if state.get("is_demo", False):
+        return {"final_status": "demo_run_not_persisted"}
+
     decision = state.get("human_decision")
     service = state.get("service")
     severity = state.get("severity")

@@ -12,8 +12,9 @@ structured_fixproposal_llm = model.with_structured_output(FixProposal)
 
 def propose_fix_node(state: InvestigationState, config: RunnableConfig) -> dict:
     thread_id = config["configurable"]["thread_id"]
+    is_demo = state.get("is_demo", False)
 
-    existing = get_proposal_by_thread_id(thread_id)
+    existing = None if is_demo else get_proposal_by_thread_id(thread_id)
 
     if existing:
         proposed_change = existing["proposed_change"]
@@ -36,12 +37,25 @@ def propose_fix_node(state: InvestigationState, config: RunnableConfig) -> dict:
         except Exception:
             return {"proposed_change": "", "is_fix_proposed": False, "route": "end"}
 
-        try:
-            fix_proposal = propose_fix(investigation_summary, evidence_log, str(proposed_change), thread_id)
-            proposal_id = fix_proposal["id"]
+        if is_demo:
+            proposal_id = f"demo-{thread_id}"
             is_fix_proposed = True
-        except Exception:
-            return {"proposed_change": proposed_change, "is_fix_proposed": False, "route": "end"}
+        else:
+            try:
+                fix_proposal = propose_fix(investigation_summary, evidence_log, str(proposed_change), thread_id)
+                proposal_id = fix_proposal["id"]
+                is_fix_proposed = True
+            except Exception:
+                return {"proposed_change": proposed_change, "is_fix_proposed": False, "route": "end"}
+
+    if is_demo:
+        return {
+            "is_fix_proposed": is_fix_proposed,
+            "proposed_change": proposed_change,
+            "proposal_id": proposal_id,
+            "human_decision": "",
+            "route": "end"
+        }
 
     decision = interrupt({
         "proposal_id": proposal_id,
