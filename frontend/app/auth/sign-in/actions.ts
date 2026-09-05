@@ -2,13 +2,8 @@
 
 import { auth } from '@/lib/auth/server';
 import { redirect } from 'next/navigation';
+import { EMAIL_REGEX } from '@/constants';
 
-interface SignInState {
-  error?: string;
-  success?: boolean;
-}
-
-const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 // Simple in-memory rate limiting (in production, use Redis or database)
 const loginAttempts = new Map<string, { count: number; timestamp: number }>();

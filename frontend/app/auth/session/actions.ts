@@ -3,11 +3,7 @@
 
 import { auth } from '@/lib/auth/server';
 
-interface SessionActionState {
-  error?: string;
-  success?: boolean;
-  sessions?: any[];
-}
+
 
 /**
  * List all active sessions for the current user

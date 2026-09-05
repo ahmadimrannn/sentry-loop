@@ -17,12 +17,6 @@ import { useRouter } from "next/navigation";
 import AuthImage from "../../../components/shared/AuthImage"
 
 
-interface ForgotPasswordState {
-  error?: string;
-  success?: boolean;
-  message?: string;
-}
-
 export default function ForgotPasswordPage() {
     const [state, formAction, isPending] = useActionState(sendPasswordResetEmail, null);
 

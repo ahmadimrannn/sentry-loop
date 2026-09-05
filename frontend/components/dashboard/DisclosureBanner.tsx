@@ -24,7 +24,7 @@ export function DisclosureBanner() {
   return (
     <div className="w-full bg-neutral-100 dark:bg-neutral-900 border-b border-border py-2 px-4 text-xs text-neutral-600 dark:text-neutral-300 flex items-center justify-between gap-3 shrink-0">
       <p className="leading-normal font-sans">
-        This is a personal showcase project, not a multi-tenant product, there is no data isolation between accounts, and every incident shown is a real bug from the owner&apos;s own production apps (Lumen, CogniLead).
+        This is a personal showcase project, not a multi-tenant product, there is no data isolation between accounts, and every incident shown is a real bug from my own production apps (Lumen, CogniLead).
       </p>
       <button
         onClick={handleDismiss}

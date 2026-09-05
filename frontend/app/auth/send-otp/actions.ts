@@ -3,10 +3,7 @@
 import { auth } from '@/lib/auth/server';
 import { redirect } from 'next/navigation';
 
-interface SendOtpState {
-  error?: string;
-  success?: boolean;
-}
+
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 

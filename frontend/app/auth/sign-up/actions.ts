@@ -2,18 +2,9 @@
 
 import { auth } from '@/lib/auth/server';
 import { redirect } from 'next/navigation';
+import { EMAIL_REGEX, MAX_NAME_LENGTH, MAX_PASSWORD_LENGTH, MIN_NAME_LENGTH, MIN_PASSWORD_LENGTH } from '@/constants';
 
-// Validation constants
-const MIN_PASSWORD_LENGTH = 8;
-const MAX_PASSWORD_LENGTH = 128;
-const MIN_NAME_LENGTH = 2;
-const MAX_NAME_LENGTH = 100;
-const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-interface SignUpState {
-  error?: string;
-  success?: boolean;
-}
 
 /**
  * Validates email format

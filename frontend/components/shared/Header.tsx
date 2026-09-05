@@ -5,17 +5,12 @@ import { motion, AnimatePresence } from "motion/react"
 import { Menu, X } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
+import { navLinks } from "@/constants"
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false)
 
   const toggleMenu = () => setIsOpen(!isOpen)
-
-  const navLinks = [
-    { name: "How It Works", path: "#how-it-works" },
-    { name: "Architecture", path: "#architecture" },
-    { name: "Github", path: "https://github.com/ahmadimrannn/sentry-loop" },
-  ]
 
   return (
     <div className="flex justify-center w-full py-6 px-4">

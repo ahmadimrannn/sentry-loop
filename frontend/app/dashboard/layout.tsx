@@ -1,5 +1,4 @@
 import { auth } from "@/lib/auth/server";
-import { DisclosureBanner } from "@/components/dashboard/DisclosureBanner";
 import { DashboardShell } from "@/components/dashboard/DashboardNav";
 
 export const dynamic = "force-dynamic";
@@ -19,7 +18,6 @@ export default async function DashboardLayout({
 
   return (
     <div className="min-h-screen flex flex-col bg-background font-inter">
-      <DisclosureBanner />
       <DashboardShell userEmail={userEmail} userName={userName} userImage={userImage}>
         {children}
       </DashboardShell>

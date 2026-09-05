@@ -1,18 +1,8 @@
 'use server';
 
 import { auth } from '@/lib/auth/server';
+import { EMAIL_REGEX } from '@/constants';
 
-interface ForgotPasswordState {
-  error?: string;
-  success?: boolean;
-  message?: string;
-}
-
-const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-/**
- * Validates email format
- */
 function validateEmail(email: string): { valid: boolean; error?: string } {
   if (!email) {
     return { valid: false, error: 'Email is required' };
@@ -31,10 +21,6 @@ function validateEmail(email: string): { valid: boolean; error?: string } {
   return { valid: true };
 }
 
-/**
- * Send password reset email using OTP
- * Uses emailOtp.sendVerificationOtp with type 'forget-password'
- */
 export async function sendPasswordResetEmail(
   _prevState: ForgotPasswordState | null,
   formData: FormData
