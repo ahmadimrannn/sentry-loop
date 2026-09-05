@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Analytics } from '@vercel/analytics/next';
 import { Geist, Inter_Tight } from "next/font/google";
 import "./globals.css";
 
@@ -28,6 +29,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
             suppressHydrationWarning
             className="min-h-full flex flex-col font-sans">
                 {children}
+                <Analytics />
         </body>
     </html>
   );
