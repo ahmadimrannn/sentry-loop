@@ -14,7 +14,7 @@ const interTight = Inter_Tight({
 });
 
 export const metadata: Metadata = {
-  title: "Sentry Loop - AI-on-Call Engineer",
+  title: "Sentry Loop — AI-on-Call Engineer",
   description: "Autonomous Incident Investigation Agent",
 };
 
