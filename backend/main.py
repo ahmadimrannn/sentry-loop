@@ -108,7 +108,7 @@ def start_investigation(payload: InvestigateRequest, background_tasks: Backgroun
         "final_status": "",
         "proposal_id": "",
         "route": "",
-        "is_demo": True,  # requires the propose_fix_node change described above
+        "is_demo": True,
     }
 
     config = {
