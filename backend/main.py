@@ -80,6 +80,7 @@ def start_investigation(payload: InvestigateRequest, background_tasks: Backgroun
 
     normalized_service = payload.service.strip().lower()
     thread_id = f"demo-{uuid.uuid4()}"
+    print(f"[investigate] generated thread_id={thread_id}")
 
     initial_state = {
         "service": normalized_service,
@@ -115,16 +116,15 @@ def start_investigation(payload: InvestigateRequest, background_tasks: Backgroun
         "callbacks": [langfuse_handler],
     }
 
-    try:
-        with pool.connection() as conn:
-            with conn.cursor() as cur:
-                cur.execute("INSERT INTO demo_runs (thread_id, status) VALUES (%s, 'running')", (thread_id,))
-            conn.commit()
-    finally:
-        conn.close()
+    with pool.connection() as conn:
+        with conn.cursor() as cur:
+            cur.execute("INSERT INTO demo_runs (thread_id, status) VALUES (%s, 'running')", (thread_id,))
+        conn.commit()
+    print(f"[investigate] inserted demo_runs row for thread_id={thread_id}")
 
     background_tasks.add_task(run_investigation_background, initial_state, config, thread_id)
 
+    print(f"[investigate] about to return thread_id={thread_id}")
     return {"thread_id": thread_id}
 
 
