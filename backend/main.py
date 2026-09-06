@@ -46,16 +46,13 @@ def run_investigation_background(initial_state: dict, config: dict, thread_id: s
 
 
 def _update_demo_run_status(thread_id: str, status: str, error: str | None = None):
-    try:
-        with pool.connection() as conn:
-            with conn.cursor() as cur:
-                cur.execute(
-                    "UPDATE demo_runs SET status = %s, error = %s WHERE thread_id = %s",
-                    (status, error, thread_id),
-                )
-            conn.commit()
-    finally:
-        conn.close()
+    with pool.connection() as conn:
+        with conn.cursor() as cur:
+            cur.execute(
+                "UPDATE demo_runs SET status = %s, error = %s WHERE thread_id = %s",
+                (status, error, thread_id),
+            )
+        conn.commit()
 
 
 # --- rate limiter, see the caveat below this code before trusting it ---
@@ -133,13 +130,10 @@ def start_investigation(payload: InvestigateRequest, background_tasks: Backgroun
 
 @app.get("/investigate/status/{thread_id}")
 def get_investigation_status(thread_id: str):
-    try:
-        with pool.connection() as conn:
-            with conn.cursor() as cur:
-                cur.execute("SELECT status, error FROM demo_runs WHERE thread_id = %s", (thread_id,))
-                row = cur.fetchone()
-    finally:
-        conn.close()
+    with pool.connection() as conn:
+        with conn.cursor() as cur:
+            cur.execute("SELECT status, error FROM demo_runs WHERE thread_id = %s", (thread_id,))
+            row = cur.fetchone()
 
     if row is None:
         raise HTTPException(status_code=404, detail="No investigation found for this thread_id.")
@@ -163,11 +157,6 @@ def get_investigation_status(thread_id: str):
         }
 
     values = snapshot.values
-
-    # snapshot.next is empty once the graph has genuinely finished with 
-    # nothing left to run or wait on. Since is_demo=True skips the 
-    # interrupt() call, a finished demo run reaches END on its own instead 
-    # of pausing — so this is a reliable "actually done" signal here.
     is_done = not snapshot.next
 
     return {

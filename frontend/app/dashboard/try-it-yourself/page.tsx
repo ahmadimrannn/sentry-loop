@@ -106,6 +106,12 @@ export default function TryItYourselfPage() {
 
     const startPolling = useCallback(
         (thread_id: string) => {
+            if (!thread_id) {
+                setErrorMsg("No investigation ID to poll.");
+                setPageState("error");
+                return;
+            }
+
             const poll = async () => {
                 try {
                     const res = await fetch(`/api/investigate/status/${thread_id}`);
@@ -118,7 +124,6 @@ export default function TryItYourselfPage() {
                         return;
                     }
                     if (!res.ok) {
-                        // Non-fatal transient error; keep polling
                         return;
                     }
                     const data: StatusResponse = await res.json();
@@ -128,7 +133,7 @@ export default function TryItYourselfPage() {
                 }
             };
 
-            poll(); // Immediate first poll
+            poll();
             pollRef.current = setInterval(poll, POLL_INTERVAL_MS);
         },
         [stopPolling, handlePollResponse]
@@ -167,7 +172,15 @@ export default function TryItYourselfPage() {
                 return;
             }
 
-            const { thread_id } = await res.json();
+            const body = await res.json();
+            const thread_id: string | undefined = body?.thread_id;
+
+            if (!thread_id) {
+                setErrorMsg("The server didn't return a valid investigation ID.");
+                setPageState("error");
+                return;
+            }
+
             threadRef.current = thread_id;
             startPolling(thread_id);
         } catch {
@@ -188,7 +201,6 @@ export default function TryItYourselfPage() {
         // Keep the last input/service so the user can tweak and resubmit
     };
 
-    // Cleanup on unmount
     useEffect(() => () => stopPolling(), [stopPolling]);
 
     // ─── Render ───────────────────────────────────────────────────────────────
