@@ -17,6 +17,9 @@ const interTight = Inter_Tight({
 export const metadata: Metadata = {
   title: "Sentry Loop — AI-on-Call Engineer",
   description: "Autonomous Incident Investigation Agent",
+  verification: {
+    google: 'VMDzTCjPuPvMQv8nE4t_obHGaCBtmmY28Bm3IwrfeME',
+  },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
