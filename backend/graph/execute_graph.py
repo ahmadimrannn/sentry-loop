@@ -116,7 +116,7 @@ if __name__ == "__main__":
 
     thread_id = str(uuid.uuid4())
     result = run_investigation_to_completion(
-        service="cognilead", incident_text="Cognilead CRM is failing, users are complaining, not sure what changed",
+        service="cognilead", incident_text="Tried resuming an investigation thread I assumed had already started from an earlier run. Instead of resuming cleanly, it threw a key error right away. Seems like the resume logic doesn't check whether a checkpoint actually exists first.",
         thread_id=thread_id
     )
 
