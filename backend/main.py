@@ -72,6 +72,62 @@ def _check_rate_limit(client_ip: str) -> bool:
     return True
 
 
+# This endpoint is for automatic trigger of sentry loop
+@app.post("/internal/investigate")
+def start_internal_investigation(payload: InvestigateRequest, background_tasks: BackgroundTasks,
+                                  authorization: str = Header(default=None)):
+    expected_secret = os.getenv("INTERNAL_TRIGGER_SECRET")
+    if not expected_secret or authorization != f"Bearer {expected_secret}":
+        raise HTTPException(status_code=401, detail="Unauthorized")
+ 
+    normalized_service = payload.service.strip().lower()
+    thread_id = f"auto-{uuid.uuid4()}"
+    print(f"[internal/investigate] generated thread_id={thread_id}")
+ 
+    initial_state = {
+        "service": normalized_service,
+        "incident": payload.incident,
+        "current_hypothesis": "",
+        "previous_hypothesis": "",
+        "investigation_summary": "",
+        "has_unexplored_lead": True,
+        "metrics_checked": False,
+        "service_status_checked": False,
+        "step_count": 0,
+        "severities_tried": [],
+        "known_routes": get_known_routes(normalized_service),
+        "routes_tried": [],
+        "evidence_log": [],
+        "retrieved_incidents": [],
+        "status_after_routing": "",
+        "severity": "",
+        "pending_decision": {},
+        "tool_result": [],
+        "checked_this_step": "",
+        "proposed_change": "",
+        "is_fix_proposed": False,
+        "human_decision": "",
+        "final_status": "",
+        "proposal_id": "",
+        "route": "",
+        "is_demo": False,   # only real difference from start_investigation's initial_state
+    }
+ 
+    config = {
+        "configurable": {"thread_id": thread_id},
+        "callbacks": [langfuse_handler],
+    }
+ 
+    with pool.connection() as conn:
+        with conn.cursor() as cur:
+            cur.execute("INSERT INTO demo_runs (thread_id, status) VALUES (%s, 'running')", (thread_id,))
+        conn.commit()
+ 
+    background_tasks.add_task(run_investigation_background, initial_state, config, thread_id)
+ 
+    print(f"[internal/investigate] about to return thread_id={thread_id}")
+    return {"thread_id": thread_id}
+
 @app.post("/investigate")
 def start_investigation(payload: InvestigateRequest, background_tasks: BackgroundTasks, request: Request):
     client_ip = request.client.host if request.client else "unknown"
