@@ -23,18 +23,18 @@ def retrieve_similar_incidents(service: str, severity: str, incident: str):
         with conn.cursor() as cur:
             cur.execute(
                 """
-                SELECT investigation_summary, proposed_change, reached_via,
-                       final_status, embedding <=> %s::vector AS distance
-                FROM incidents
-                WHERE embedding IS NOT NULL
-                ORDER BY distance ASC
-                LIMIT %s
+                    SELECT investigation_summary, proposed_change, reached_via,
+                        final_status, embedding <=> %s::vector AS distance
+                    FROM incidents
+                    WHERE embedding IS NOT NULL
+                    ORDER BY distance ASC
+                    LIMIT %s
                 """,
                 (query_embedding, TOP_K),
             )
             rows = cur.fetchall()
 
     return [
-        r for r in rows if r["distance"] <=MAX_DISTANCE
+        r for r in rows if r["distance"] <= MAX_DISTANCE
     ]
 
